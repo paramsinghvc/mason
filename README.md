@@ -22,7 +22,9 @@
     <br />
     <br />
     <h4 align="center">Example Screenshot</h4>
+    <p align="center">
     <img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" width="500" />
+    </p>
     </p>
     <p align="center">
     <a href="https://codesandbox.io/s/mason-demo-0tu4t?fontsize=14">View Demo</a>
@@ -34,7 +36,7 @@
     <a href="https://www.npmjs.com/package/@mollycule/mason">NPM Link</a>
   </p>
 </p>
-
+<br/>
 <!-- TABLE OF CONTENTS -->
 
 ## Table of Contents
@@ -79,6 +81,12 @@ Following Peer Dependencies are required for using mason package:
 
 ```sh
 npm i @mollycule/mason -S
+```
+
+or
+
+```sh
+yarn add @mollycule/mason
 ```
 
 <!-- USAGE EXAMPLES -->
@@ -223,7 +231,6 @@ Project Link: [https://github.com/paramsinghvc/mason](https://github.com/paramsi
 
 ## Acknowledgements
 
-- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 - [Img Shields](https://shields.io)
 
 <!-- MARKDOWN LINKS & IMAGES -->
