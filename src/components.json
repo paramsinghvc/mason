@@ -1,0 +1,78 @@
+{
+  "page": "HOME",
+  "config": {
+    "id": "HomePageLayout",
+    "type": "PAGE_LAYOUT",
+    "children": [
+      {
+        "id": "firstSearchInput",
+        "type": "SEARCH_INPUT",
+        "meta": {
+          "disabled": "false",
+          "maxLength": 50,
+          "minLength": 5,
+          "placeholder": "Type here to search"
+        },
+        "validations": [
+          {
+            "type": "REQUIRED"
+          },
+          {
+            "type": "REGEX",
+            "meta": {
+              "pattern": "^\\w{3}\\d{0,2}$"
+            }
+          },
+          {
+            "type": "CUSTOM",
+            "meta": {
+              "functionName": "validateSearch"
+            }
+          }
+        ],
+        "events": {
+          "change": [
+            {
+              "type": "AJAX_CALL",
+              "meta": {
+                "endpoint": "/data/chart-data/${0}/foo/${1}",
+                "urlParams": ["firstSearchInput", "<fieldIdHere>"],
+                "queryParams": {
+                  "foo": "<FieldIdHere>",
+                  "bar": "<FieldIdHere>"
+                },
+                "fieldId": "<FieldId of the field whose data we want to set>"
+              }
+            }
+          ],
+          "click": {
+            "type": "SET_DATA",
+            "meta": {
+              "fieldId": "<FieldId>",
+              "valueField": "<FieldId>",
+              "value": "abc"
+            }
+          }
+        }
+      },
+      {
+        "id": "myListBox",
+        "type": "LIST_GROUP",
+        "meta": {
+          "groupHeading": "Lorem Ipsum",
+          "groupSubHeading": "A foxtrot above my head"
+        },
+        "data": {
+          "type": "AJAX_CALL",
+          "meta": {
+            "endpoint": "/data/chart-data/${0}/foo/${1}",
+            "queryParams": {
+              "foo": "<FieldIdHere>",
+              "bar": "hardcodedText"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

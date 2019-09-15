@@ -1,0 +1,115 @@
+{
+  "page": "RECIPES",
+  "config": {
+    "id": "HomePageLayout",
+    "type": "PAGE_LAYOUT",
+    "style": {
+      "display": "grid"
+    },
+    "data": {
+      "type": "AJAX_CALL",
+      "meta": {
+        "endpoint": "https://api.edamam.com/search",
+        "queryParams": {
+          "q": "egg",
+          "app_id": "d909f104",
+          "app_key": "18135206c68fec2353536933e145d080"
+        },
+        "fieldIds": {
+          "recipesListGroup": "recipeDataSourceProcessor"
+        }
+      }
+    },
+    "children": [
+      {
+        "id": "firstSearchInput",
+        "type": "SEARCH_INPUT",
+        "meta": {
+          "disabled": false,
+          "maxLength": 50,
+          "minLength": 2,
+          "placeholder": "Type here to search",
+          "value": ""
+        },
+        "validations": [
+          {
+            "type": "REQUIRED"
+          },
+          {
+            "type": "REGEX",
+            "meta": {
+              "pattern": "^\\w{3}\\d{0,2}$"
+            }
+          },
+          {
+            "type": "CUSTOM",
+            "meta": {
+              "functionName": "validateSearch"
+            }
+          },
+          {
+            "type": "LENGTH",
+            "meta": {
+              "min": 3,
+              "max": 10
+            }
+          }
+        ],
+        "events": {
+          "onChange": [
+            {
+              "type": "SET_VALUE"
+            },
+            {
+              "type": "AJAX_CALL",
+              "meta": {
+                "endpoint": "https://api.edamam.com/search",
+                "queryParams": {
+                  "q": "<%SELF%>",
+                  "app_id": "d909f104",
+                  "app_key": "18135206c68fec2353536933e145d080"
+                },
+                "dataProcessor": "recipeDataSourceProcessor",
+                "fieldId": "recipesListGroup"
+              },
+              "when": {
+                "operator": "=",
+                "leftOperand": "<%secondSearchInput%>",
+                "rightOperand": "kale",
+                "type": "ATOMIC"
+              }
+            }
+          ]
+        },
+        "style": {
+          "marginBottom": 10
+        }
+      },
+      {
+        "id": "secondSearchInput",
+        "type": "SEARCH_INPUT",
+        "meta": {
+          "value": ""
+        },
+        "show": {
+          "operator": "=",
+          "leftOperand": "<%firstSearchInput%>",
+          "rightOperand": "kale",
+          "type": "ATOMIC"
+        },
+        "events": {
+          "onChange": {
+            "type": "SET_VALUE"
+          }
+        },
+        "style": {
+          "marginBottom": 10
+        }
+      },
+      {
+        "id": "recipesListGroup",
+        "type": "RECIPES_LIST_GROUP"
+      }
+    ]
+  }
+}

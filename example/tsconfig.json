@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "baseUrl": "./",
+        "resolveJsonModule": true,
+        "paths": {
+            "~*": ["*"]
+        },
+        "target": "esnext",
+        "module": "esnext"
+      },
+    "include": ["**/*.tsx?"],
+    "exclude": ["node_modules"]
+}
