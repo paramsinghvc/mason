@@ -50,11 +50,18 @@ const rippleCSS = css`
   }
 `;
 
+const message = css`
+  font-size: 28px;
+  color: #909090;
+  text-align: center;
+  font-weight: 300;
+`;
+
 export const dataSourceProcessor = dataSource => {
   return dataSource.hits.map(h => h.recipe);
 };
 
-const Recipes = ({ datasource, loading }: any) => {
+const Recipes = ({ datasource, loading, error }: any) => {
   const dataSource = datasource || [];
 
   return (
@@ -64,6 +71,10 @@ const Recipes = ({ datasource, loading }: any) => {
           <div></div>
           <div></div>
         </section>
+      ) : error ? (
+        <p css={message}>{error}</p>
+      ) : dataSource && dataSource.length === 0 ? (
+        <p css={message}>No Results Found</p>
       ) : (
         dataSource.map(i => <RecipeItem key={i.uri} data={i} />)
       )}

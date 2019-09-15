@@ -3,13 +3,13 @@
 [![Build Status][build-shield]]()
 [![MIT License][license-shield]][license-url]
 [![Contributors][contributors-shield]]()
-<img src="https://img.badgesize.io/paramsinghvc/mason/master/dist/index.js?style=for-the-badge&compression=gzip&label=gzip+size&max=3000&softmax=2000">
+<img src="https://img.badgesize.io/paramsinghvc/mason/master/dist/index.js?style=for-the-badge&compression=gzip&label=gzip+size&max=8000&softmax=4000">
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/paramsinghvc/redux-hooks">
+  <a href="https://github.com/paramsinghvc/mason">
     <img src="https://user-images.githubusercontent.com/4329912/59576593-06a31000-90de-11e9-9187-2abbd4009ba4.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -18,16 +18,20 @@
   <p align="center">
     Building dynamic, eventful, cohesive config driven UI easily
     <br />
-    <a href="https://www.npmjs.com/package/@mollycule/redux-hook"><strong>Explore the docs »</strong></a>
+    <a href="https://www.npmjs.com/package/@mollycule/mason"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://codesandbox.io/s/typescript-redux-3bb54?fontsize=14">View Demo</a>
+    <h4 align="center">Example Screenshot</h4>
+    <img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" />
+    </p>
+    <p align="center">
+    <a href="https://codesandbox.io/s/mason-demo-0tu4t?fontsize=14">View Demo</a>
     ·
-    <a href="https://github.com/paramsinghvc/redux-hooks/issues">Report Bug</a>
+    <a href="https://github.com/paramsinghvc/mason/issues">Report Bug</a>
     ·
-    <a href="https://github.com/paramsinghvc/redux-hooks/issues">Request Feature</a>
+    <a href="https://github.com/paramsinghvc/mason/issues">Request Feature</a>
     .
-    <a href="https://www.npmjs.com/package/@mollycule/redux-hook">NPM Link</a>
+    <a href="https://www.npmjs.com/package/@mollycule/mason">NPM Link</a>
   </p>
 </p>
 
@@ -67,10 +71,9 @@ It also needs a map of component type vs React component factories to render the
 
 ### Prerequisites
 
-Following Peer Dependencies are required for using redux-hooks package:
+Following Peer Dependencies are required for using mason package:
 
-- react: "^16.9.0",
-- redux: "^4.0.1"
+- react: "^16.8.6"
 
 ### Installation
 
@@ -82,68 +85,113 @@ npm i @mollycule/mason -S
 
 ## Usage
 
-1. Wrap the root app component with `redux-hook` provider by calling `createStoreContext<IRootState>` while specifying the shape of Redux App RootState into Generic Parameter.
+1. Build the mason config for rendering the UI as per your needs.
 
-```tsx
-import { createStoreContext } from "@mollycule/redux-hook";
-
-const { Provider } = createStoreContext<IRootState>();
-
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <MainComponent />
-      </Provider>
-    );
+```json
+{
+  "page": "HOME",
+  "config": {
+    "id": "HomePageLayout",
+    "type": "PAGE_LAYOUT",
+    "children": [
+      {
+        "id": "firstSearchInput",
+        "type": "SEARCH_INPUT",
+        "meta": {
+          "disabled": "false",
+          "maxLength": 50,
+          "minLength": 5,
+          "placeholder": "Type here to search"
+        },
+        "validations": [
+          {
+            "type": "REQUIRED"
+          },
+          {
+            "type": "REGEX",
+            "meta": {
+              "pattern": "^\\w{3}\\d{0,2}$"
+            }
+          },
+          {
+            "type": "CUSTOM",
+            "meta": {
+              "functionName": "validateSearch"
+            }
+          }
+        ],
+        "events": {
+          "change": [
+            {
+              "type": "AJAX_CALL",
+              "meta": {
+                "endpoint": "/data/chart-data/${0}/foo/${1}",
+                "urlParams": ["firstSearchInput", "<fieldIdHere>"],
+                "queryParams": {
+                  "foo": "<FieldIdHere>",
+                  "bar": "<FieldIdHere>"
+                },
+                "fieldId": "<FieldId of the field whose data we want to set>"
+              }
+            }
+          ],
+          "click": {
+            "type": "SET_DATA",
+            "meta": {
+              "fieldId": "<FieldId>",
+              "valueField": "<FieldId>",
+              "value": "abc"
+            }
+          }
+        }
+      },
+      {
+        "id": "myListBox",
+        "type": "LIST_GROUP",
+        "meta": {
+          "groupHeading": "Lorem Ipsum",
+          "groupSubHeading": "A foxtrot above my head"
+        },
+        "data": {
+          "type": "AJAX_CALL",
+          "meta": {
+            "endpoint": "/data/chart-data/${0}/foo/${1}",
+            "queryParams": {
+              "foo": "<FieldIdHere>",
+              "bar": "hardcodedText"
+            }
+          }
+        }
+      }
+    ]
   }
 }
-
-export default App;
 ```
 
-2. Now, we can simply use the `useRedux` hook anywhere in our app functional components as
+2. Make use of `ReactRenderer` to build the UI based on the config you created in previous step as
 
 ```tsx
-import useRedux from "@mollycule/redux-hook";
-import { incrementCount, decrementCount, setIsLoading } from "./actions";
-
-const MyComponent = props => {
-  const mapStateToProps = state => ({
-    count: state.count,
-    isLoading: state.isLoading
-  });
-  const mapDispatchToProps = {
-    incrementCount,
-    decrementCount,
-    setIsLoading
-  };
-  const mappedProps = useRedux(mapStateToProps, mapDispatchToProps);
-  const { count, incrementCounter, setIsLoading } = mappedProps;
-  return (
-    <p onClick={incrementCount} onMouseOver={() => setIsLoading(true)}>
-      {count}
-    </p>
-  );
-};
-```
-
-**Note**: For `mapDispatchToProps`, we can pass a normal function as well that accepts dispatch and returns an object of dispatch bound actions from it as
-
-```ts
-const mapDispatchToProps = dispatch => ({
-  authenticateUser: () => {
-    dispatch({
-      type: "AUTHENTICATE_USER"
-    });
-  },
-  setIsLoading: (status: boolean) => {
-    dispatch(setIsLoading(status));
+import { ReactConfigRenderer } from "@mollycule/mason";
+const homePageRenderer = new ReactConfigRenderer(
+  config,
+  new Map([
+    ["PAGE_LAYOUT", HomePageLayout], 
+    ["SEARCH_INPUT", Search],
+    ["RECIPES_LIST_GROUP", Recipes]
+  ]),
+  {
+    dataProcessors: {
+      recipeDataSourceProcessor(dataSource) {
+        return dataSource.hits.map(h => h.recipe);
+      }
+    }
   }
-});
-```
+);
 
-Passing simply an object of actions, automatically bind them to dispatch using redux [`bindActionCreators`](https://redux.js.org/api/bindactioncreators). Also, you can even skip the second paramter of useRedux hook if you just want to access the props from the store.
+const App = () => <main>{homePageRenderer.render()}</main>;
+
+ReactDOM.render(<App/>, document.getElementById("root"));
+```
 
 <!-- CONTRIBUTING -->
 
@@ -169,7 +217,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Param Singh - [@paramsinghvc](https://github.com/paramsinghvc) - paramsinghvc@gmail.com
 
-Project Link: [https://github.com/paramsinghvc/redux-hooks](https://github.com/paramsinghvc/redux-hooks)
+Project Link: [https://github.com/paramsinghvc/mason](https://github.com/paramsinghvc/mason)
 
 <!-- ACKNOWLEDGEMENTS -->
 

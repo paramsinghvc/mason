@@ -75,7 +75,7 @@
               "when": {
                 "operator": "=",
                 "leftOperand": "<%secondSearchInput%>",
-                "rightOperand": "kale",
+                "rightOperand": "",
                 "type": "ATOMIC"
               }
             }

@@ -56,6 +56,17 @@ export const handleEvent = (
           }
         });
 
+        if (rootState[fieldId || id] && rootState[fieldId || id].error) {
+          rootDispatch({
+            type: "UPDATE_PROP",
+            payload: {
+              id: fieldId || id,
+              prop: "error",
+              value: null
+            }
+          });
+        }
+
         fetch(
           `${endpoint}?${
             queryParams
@@ -108,12 +119,37 @@ export const handleEvent = (
             }
           })
           .catch(e => {
+            rootDispatch({
+              type: "UPDATE_PROP",
+              payload: {
+                id: fieldId || id,
+                prop: "loading",
+                value: false
+              }
+            });
+
             if (e instanceof Response) {
               e.text().then(error => {
                 console.error(`Error while fetching datasource: `, error);
+                rootDispatch({
+                  type: "UPDATE_PROP",
+                  payload: {
+                    id: fieldId || id,
+                    prop: "error",
+                    value: error
+                  }
+                });
               });
             } else {
               console.error(`Error while fetching datasource: `, e);
+              rootDispatch({
+                type: "UPDATE_PROP",
+                payload: {
+                  id: fieldId || id,
+                  prop: "error",
+                  value: (e as TypeError).message
+                }
+              });
             }
           });
       }

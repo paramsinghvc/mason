@@ -24,17 +24,19 @@
   "repository": "https://github.com/paramsinghvc/mason.git",
   "scripts": {
     "start": "NODE_ENV=development parcel example/index.html --no-cache -d example/build",
-    "build": "npm run build:types && babel ./src -d ./dist --extensions '.ts,.tsx,.js' --source-maps inline",
+    "build": "webpack -p",
+    "build:watch": "NODE_ENV=development webpack --watch",
     "build:types": "tsc --declarationDir ./dist --emitDeclarationOnly"
   },
   "dependencies": {
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
+    "@welldone-software/why-did-you-render": "^3.3.4",
     "husky": "^3.0.5",
     "immer": "^3.1.2",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2",
-    "react": "^16.9.0",
+    "react": ">=16.9",
     "react-dom": "^16.9.0"
   },
   "eslintConfig": {
