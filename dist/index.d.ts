@@ -103,12 +103,14 @@ export interface IDataSetValueConfig {
     type: "SET_VALUE";
     meta: {
         value: any;
+        fieldId?: string;
     };
 }
 export interface IDataSetDatasourceConfig {
     type: "SET_DATASOURCE";
     meta: {
         data: any;
+        fieldId?: string;
     };
 }
 export interface IConfigNode {
