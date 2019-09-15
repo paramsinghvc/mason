@@ -156,11 +156,11 @@ export const handleEvent = (
       break;
     case "SET_DATASOURCE":
       {
-        const { data: dataSource } = (eventConfig as IDataSetDatasourceConfig).meta;
+        const { data: dataSource, fieldId } = (eventConfig as IDataSetDatasourceConfig).meta;
         rootDispatch({
           type: "UPDATE_PROP",
           payload: {
-            id,
+            id: fieldId || id,
             prop: "datasource",
             value: dataSource
           }
@@ -182,7 +182,7 @@ export const handleEvent = (
         rootDispatch({
           type: "UPDATE_PROP",
           payload: {
-            id,
+            id: meta.fieldId || id,
             prop: "value",
             value: finalValue
           }
