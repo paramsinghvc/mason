@@ -182,7 +182,7 @@ export const handleEvent = (
         rootDispatch({
           type: "UPDATE_PROP",
           payload: {
-            id: meta.fieldId || id,
+            id: (meta && meta.fieldId) || id,
             prop: "value",
             value: finalValue
           }
