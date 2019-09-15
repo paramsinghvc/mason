@@ -22,7 +22,7 @@
     <br />
     <br />
     <h4 align="center">Example Screenshot</h4>
-    <img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" />
+    <img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" width="500" />
     </p>
     <p align="center">
     <a href="https://codesandbox.io/s/mason-demo-0tu4t?fontsize=14">View Demo</a>
