@@ -10,6 +10,7 @@ const holder = css`
   padding: 20px;
   height: 80vh;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
 `;
 
 const ripple = keyframes`

@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, {
   createContext,
   memo,
@@ -87,6 +88,14 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
+export type IRendererOptions = {
+  initialValues?: Map<string, any>;
+  dataProcessors?: {
+    [k: string]: (a: any) => any;
+  };
+  onStateChange?: (state: { [k: string]: any }) => void;
+};
+
 type IRendererContext = {
   state: IObject;
   dispatch: Dispatch<{
@@ -130,45 +139,38 @@ function constructStateFromValue(config: IConfigNode, state, values: Map<string,
   return state;
 }
 
-// eslint-disable-next-line react/display-name
-const RootComponentCore: React.ForwardRefExoticComponent<{ initialState: any }> = forwardRef(
-  ({ children, initialState = {} }, ref) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    useImperativeHandle(
-      ref,
-      () => ({
-        setRootState(config: IConfigNode, val) {
-          const newState = constructStateFromValue(config, { ...state }, val);
-          dispatch({ type: "REPLACE_STATE_VALUES", payload: newState });
-        }
-      }),
-      [state]
-    );
-
-    return createElement(
-      context.Provider,
-      {
-        value: {
-          state,
-          dispatch
-        }
-      },
-      children
-    );
-  }
-);
+const RootComponentCore: React.ForwardRefExoticComponent<{
+  initialState: any;
+  onStateChange?: IRendererOptions["onStateChange"];
+}> = forwardRef(({ children, initialState = {}, onStateChange }, ref) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  useImperativeHandle(
+    ref,
+    () => ({
+      setRootState(config: IConfigNode, val) {
+        const newState = constructStateFromValue(config, { ...state }, val);
+        dispatch({ type: "REPLACE_STATE_VALUES", payload: newState });
+      }
+    }),
+    [state]
+  );
+  onStateChange && onStateChange(state);
+  return createElement(
+    context.Provider,
+    {
+      value: {
+        state,
+        dispatch
+      }
+    },
+    children
+  );
+});
 
 export const RootComponent: React.NamedExoticComponent<any> = memo(RootComponentCore);
 
 type IObject = {
   [k: string]: any;
-};
-
-type IRendererOptions = {
-  initialValues?: Map<string, any>;
-  dataProcessors?: {
-    [k: string]: (a: any) => any;
-  };
 };
 
 // const eventsSeedValue = {};
@@ -299,6 +301,10 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     const { config } = this.config;
     const initialState = this.constructInitialState(config, {});
     this.rootComponentRef = useRef();
-    return createElement(RootComponent, { initialState, ref: this.rootComponentRef }, [this.renderConfigNode(config)]);
+    return createElement(
+      RootComponent,
+      { initialState, ref: this.rootComponentRef, onStateChange: this.options.onStateChange },
+      [this.renderConfigNode(config)]
+    );
   }
 }

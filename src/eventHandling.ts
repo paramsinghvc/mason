@@ -170,14 +170,14 @@ export const handleEvent = (
     case "SET_VALUE":
       {
         const { meta } = eventConfig as IDataSetValueConfig;
-        const finalValue =
-          typeof meta !== "undefined"
-            ? meta.value
-            : value !== undefined
-            ? value
-            : event
-            ? (event.target as HTMLFormElement).value
-            : null;
+        let finalValue = null;
+        if (typeof meta !== "undefined" && meta.value) {
+          finalValue = meta.value;
+        } else if (typeof value !== "undefined") {
+          finalValue = value;
+        } else {
+          finalValue = (event.target as HTMLFormElement).value;
+        }
 
         rootDispatch({
           type: "UPDATE_PROP",

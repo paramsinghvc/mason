@@ -9,7 +9,7 @@ import Recipes, { dataSourceProcessor as recipeDataSourceProcessor } from "./Rec
 const Holder = styled.main`
   margin: 10vh auto;
   min-width: 400px;
-  width: 60vw;
+  width: 60%;
 `;
 
 const HomePageLayout = ({ children }: any) => {
@@ -22,6 +22,10 @@ const homePageRenderer = new ReactConfigRenderer(
   {
     dataProcessors: {
       recipeDataSourceProcessor
+    },
+    onStateChange(state) {
+      // eslint-disable-next-line no-console
+      console.log(state);
     }
   }
 );
