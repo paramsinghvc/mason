@@ -1,11 +1,14 @@
 
-export declare const RootComponent: React.NamedExoticComponent<any>;
-declare type IRendererOptions = {
+export declare type IRendererOptions = {
     initialValues?: Map<string, any>;
     dataProcessors?: {
         [k: string]: (a: any) => any;
     };
+    onStateChange?: (state: {
+        [k: string]: any;
+    }) => void;
 };
+export declare const RootComponent: React.NamedExoticComponent<any>;
 export declare class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     private components;
     readonly config: IConfig;

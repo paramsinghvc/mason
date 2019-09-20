@@ -3,6 +3,7 @@ import path from "path";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import DtsBundlePlugin from "@ahrakio/witty-webpack-declaration-files";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
+import CompressionWebpackPlugin from "compression-webpack-plugin";
 
 const config: webpack.Configuration = {
   entry: path.resolve(__dirname, "./src/index.ts"),
@@ -34,6 +35,14 @@ const config: webpack.Configuration = {
     ]
   },
   plugins: [
+    new CompressionWebpackPlugin({
+      test: /^index\.js$/i,
+      filename: "[path].br[query]",
+      algorithm: "brotliCompress"
+    }),
+    new CompressionWebpackPlugin({
+      test: /^index\.js$/i
+    }),
     new CleanWebpackPlugin({
       verbose: true
     }),
