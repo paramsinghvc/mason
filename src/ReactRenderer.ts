@@ -22,6 +22,11 @@ import { capitalize } from "./shared";
 
 const getWrapperComponentName = (componentId: string) => `${capitalize(componentId)}MasonWrapper`;
 
+export type ActionType = {
+  type: string;
+  payload: any;
+};
+
 /*
 const immerReducer = (state, { type, payload }) => {
   return produce(state, draft => {
@@ -107,10 +112,12 @@ type IRendererContext = {
 const context = createContext<IRendererContext>(null as any);
 
 const wrappedDispatch = (
-  dispatch: React.Dispatch<{ type: string; payload: any }>,
-  validations: Array<IValidationConfig> = []
+  dispatch: React.Dispatch<ActionType>,
+  validations: Array<IValidationConfig> = [],
+  options?: { onStateChange?: IRendererOptions["onStateChange"] }
 ) => ({ type, payload }) => {
-  if (type === "UPDATE_PROP" && payload.prop === "value") {
+  const isValuedBeingUpdated = type === "UPDATE_PROP" && payload.prop === "value";
+  if (isValuedBeingUpdated) {
     const { value, id: fieldId } = payload;
     const validationErrors = validator(validations, value);
 
@@ -123,7 +130,10 @@ const wrappedDispatch = (
       }
     });
   }
-  return dispatch({ type, payload });
+  const state = dispatch({ type, payload });
+  if (options && options.onStateChange && isValuedBeingUpdated) {
+    options.onStateChange(reducer(state, { type, payload }));
+  }
 };
 
 function constructStateFromValue(config: IConfigNode, state, values: Map<string, any>) {
@@ -141,8 +151,7 @@ function constructStateFromValue(config: IConfigNode, state, values: Map<string,
 
 const RootComponentCore: React.ForwardRefExoticComponent<{
   initialState: any;
-  onStateChange?: IRendererOptions["onStateChange"];
-}> = forwardRef(({ children, initialState = {}, onStateChange }, ref) => {
+}> = forwardRef(({ children, initialState = {} }, ref) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useImperativeHandle(
     ref,
@@ -154,17 +163,17 @@ const RootComponentCore: React.ForwardRefExoticComponent<{
     }),
     [state]
   );
-  onStateChange && onStateChange(state);
-  return createElement(
-    context.Provider,
-    {
-      value: {
-        state,
-        dispatch
+
+  const props = {
+    value: {
+      state,
+      dispatch: (action: ActionType) => {
+        dispatch(action);
+        return state;
       }
-    },
-    children
-  );
+    }
+  };
+  return createElement(context.Provider, props, children);
 });
 
 export const RootComponent: React.NamedExoticComponent<any> = memo(RootComponentCore);
@@ -192,7 +201,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
   }
   renderConfigNode(node: IConfigNode) {
     const { id, type, meta = {}, data, events = {}, validations, children, style, show } = node;
-    const { dataProcessors = {} } = this.options;
+    const { dataProcessors = {}, onStateChange } = this.options;
     // if (this.components.has(id)) return this.components.get(id);
     const elementComponent = this.elementsMap.get(type);
     if (!elementComponent) {
@@ -201,7 +210,8 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     const wrappedComponent: React.MemoExoticComponent<any> & { whyDidYouRender?: boolean } = memo(props => {
       /** Getting the reducer context as a consumer for reading the state and dispatching actions */
       const { state: rootState, dispatch } = useContext(context);
-      const rootDispatch = wrappedDispatch(dispatch, validations);
+
+      const rootDispatch = wrappedDispatch(dispatch, validations, { onStateChange });
       this.currentRootStateSnapshot = rootState;
       /** Creating the event handlers out of the events config */
       const eventsMap = useMemo(() => {
@@ -219,7 +229,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
           eventsObj[eventName] = eventHandler;
           return eventsObj;
         }, {});
-      }, [events, rootState]);
+      }, [events, rootState, rootDispatch]);
 
       /** Storing the component and its props in the rootState on mounting */
       useEffect(() => {
@@ -244,7 +254,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
             { ...(rootState[id] ? rootState[id] : { ...meta, ...props }), ...eventsMap },
             props.children
           ),
-        [rootState[id], eventsMap]
+        [rootState[id], eventsMap, props.children]
       );
       const showCondition: boolean = show !== undefined ? booleanProcessor(show, rootState) : true;
       useEffect(() => {
@@ -298,13 +308,11 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
   }
 
   render() {
-    const { config } = this.config;
-    const initialState = this.constructInitialState(config, {});
-    this.rootComponentRef = useRef();
-    return createElement(
-      RootComponent,
-      { initialState, ref: this.rootComponentRef, onStateChange: this.options.onStateChange },
-      [this.renderConfigNode(config)]
-    );
+    return memo(() => {
+      const { config } = this.config;
+      const initialState = this.constructInitialState(config, {});
+      this.rootComponentRef = useRef();
+      return createElement(RootComponent, { initialState, ref: this.rootComponentRef }, [this.renderConfigNode(config)]);
+    });
   }
 }

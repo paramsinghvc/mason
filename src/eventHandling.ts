@@ -176,7 +176,7 @@ export const handleEvent = (
         } else if (typeof value !== "undefined") {
           finalValue = value;
         } else {
-          finalValue = (event.target as HTMLFormElement).value;
+          finalValue = event && (event.target as HTMLFormElement).value;
         }
 
         rootDispatch({
