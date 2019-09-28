@@ -1,4 +1,8 @@
 
+export declare type ActionType = {
+    type: string;
+    payload: any;
+};
 export declare type IRendererOptions = {
     initialValues?: Map<string, any>;
     dataProcessors?: {
