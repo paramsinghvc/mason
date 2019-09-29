@@ -1,4 +1,10 @@
-import { IDataAjaxConfig, IDataSetDatasourceConfig, IDataSetValueConfig, IEventsConfig } from "./types";
+import {
+  IDataAjaxConfig,
+  IDataSetDatasourceConfig,
+  IDataSetValueConfig,
+  IEventsConfig,
+  ICustomHandlerConfig
+} from "./types";
 import { processValue } from "./shared";
 import { booleanProcessor } from "./booleanProcessor";
 
@@ -187,6 +193,14 @@ export const handleEvent = (
             value: finalValue
           }
         });
+      }
+      break;
+    case "CUSTOM":
+      {
+        const { meta } = eventConfig as ICustomHandlerConfig;
+        if (dataProcessors && dataProcessors[meta.name]) {
+          dataProcessors[meta.name]({ event, value, id });
+        }
       }
       break;
     default:
