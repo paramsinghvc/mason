@@ -88,7 +88,7 @@ export interface IValidationConfig extends ITypeMeta {
 /** Validator Types */
 export declare type IDataFieldConfig = IDataSetDatasourceConfig | IDataAjaxConfig | IDataAjaxConfig;
 export interface IEventsConfig extends ITypeMeta {
-    type: "AJAX_CALL" | "SET_DATASOURCE" | "SET_VALUE";
+    type: "AJAX_CALL" | "SET_DATASOURCE" | "SET_VALUE" | "CUSTOM";
     when?: BooleanConfig;
 }
 export interface IDataAjaxConfig {
@@ -118,6 +118,12 @@ export interface IDataSetDatasourceConfig {
     meta: {
         data: any;
         fieldId?: string;
+    };
+}
+export interface ICustomHandlerConfig {
+    type: "CUSTOM";
+    meta: {
+        name: string;
     };
 }
 export interface IConfigNode {
