@@ -1,0 +1,76 @@
+{
+    "page": "FORM",
+    "config": {
+      "id": "FormPageLayout",
+      "type": "PAGE_LAYOUT",
+      "style": {
+        "display": "grid"
+      },
+      "children": [
+        {
+          "id": "firstName",
+          "type": "TEXTFIELD",
+          "meta": {
+            "disabled": false,
+            "maxLength": 50,
+            "minLength": 2,
+            "placeholder": "Type here to search",
+            "value": ""
+          },
+          "validations": [
+            {
+              "type": "REQUIRED"
+            },
+            {
+              "type": "REGEX",
+              "meta": {
+                "pattern": "^\\w{3}\\d{0,2}$"
+              }
+            },
+            {
+              "type": "CUSTOM",
+              "meta": {
+                "functionName": "validateSearch"
+              }
+            },
+            {
+              "type": "LENGTH",
+              "meta": {
+                "min": 3,
+                "max": 10
+              }
+            }
+          ],
+          "events": {
+            "onChange": [
+              {
+                "type": "SET_VALUE"
+              }
+            ]
+          },
+          "style": {
+            "marginBottom": 10
+          }
+        },
+        {
+          "id": "lastName",
+          "type": "TEXTFIELD",
+          "meta": {
+            "value": ""
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 10
+          }
+        },
+        {
+          "id": "recipesListGroup",
+          "type": "RECIPES_LIST_GROUP"
+        }
+      ]
+    }
+  }

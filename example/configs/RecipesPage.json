@@ -29,7 +29,8 @@
           "maxLength": 50,
           "minLength": 2,
           "placeholder": "Type here to search",
-          "value": ""
+          "value": "",
+          "type": "search"
         },
         "validations": [
           {

@@ -2,8 +2,8 @@ import React from "react";
 import styled from "@emotion/styled";
 
 import config from "~configs/RecipesPage.json";
-import { ReactConfigRenderer } from "../../src";
-import Search from "./Search";
+import { ReactConfigRenderer } from "../../../src";
+import TextField from "~components/TextField";
 import Recipes, { dataSourceProcessor as recipeDataSourceProcessor } from "./Recipes";
 
 const Holder = styled.main`
@@ -18,7 +18,7 @@ const HomePageLayout = ({ children }: any) => {
 
 const homePageRenderer = new ReactConfigRenderer(
   config,
-  new Map([["PAGE_LAYOUT", HomePageLayout], ["SEARCH_INPUT", Search], ["RECIPES_LIST_GROUP", Recipes]]),
+  new Map([["PAGE_LAYOUT", HomePageLayout], ["SEARCH_INPUT", TextField], ["RECIPES_LIST_GROUP", Recipes]]),
   {
     dataProcessors: {
       recipeDataSourceProcessor

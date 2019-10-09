@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-const InputBox = styled.input`
+const Holder = styled.main`
   border: 2px solid grey;
   border-radius: 3px;
   padding: 15px 25px;
@@ -10,8 +10,8 @@ const InputBox = styled.input`
 `;
 
 // eslint-disable-next-line no-unused-vars
-const Search = ({ children, value, ...props }: any) => {
-  return <InputBox type="search" value={value} {...props} />;
+const LoginForm = (props: any) => {
+  return <Holder>Hola</Holder>;
 };
 
-export default Search;
+export default LoginForm;
