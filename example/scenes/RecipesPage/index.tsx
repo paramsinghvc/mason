@@ -24,6 +24,13 @@ const snapshotContainer = css`
   font-size: 14px;
 `;
 
+const mainHolder = css`
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: center;
+  justify-content: space-around;
+`;
+
 const RecipesPage = () => {
   const [valuesSnapshot, setValuesSnapshot] = useState();
 
@@ -39,7 +46,7 @@ const RecipesPage = () => {
     return homePageRenderer.render();
   }, [homePageRenderer]);
   return (
-    <>
+    <main css={mainHolder}>
       <section css={buttonsSection}>
         <button css={button} onClick={handleGetCurrentValuesSnapshot}>
           Get Current Values Snapshot
@@ -50,7 +57,7 @@ const RecipesPage = () => {
         </button>
       </section>
       <section>{<RenderableElement />}</section>
-    </>
+    </main>
   );
 };
 

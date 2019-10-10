@@ -22,12 +22,15 @@ export enum OperationType {
   COMPOUND = "COMPOUND"
 }
 
-export type BooleanConfig = {
+export type ConditionalConfig = {
   type: OperationType;
   operator: ComparisonOperators | CompoundOperators;
-  leftOperand: string | BooleanConfig;
-  rightOperand: string | BooleanConfig;
+  leftOperand: string | ConditionalConfig;
+  rightOperand: string | ConditionalConfig;
 };
+
+export type BooleanConfig = ConditionalConfig;
+export type DisabledConfig = ConditionalConfig;
 
 /** Boolean Configs */
 
@@ -98,6 +101,7 @@ export interface IConfigNode {
   meta?: any;
   style?: any;
   show?: boolean | BooleanConfig;
+  disabled?: boolean | DisabledConfig | ICustomHandlerConfig;
   validations?: Array<IValidationConfig>;
   events?: {
     [eventName: string]: Array<IEventsConfig> | IEventsConfig;
@@ -107,7 +111,7 @@ export interface IConfigNode {
 
 export interface IConfig {
   page: string;
-  config: IConfigNode;
+  config: IConfigNode | Array<IConfigNode>;
 }
 
 export interface IConfigRenderer<ReturnNodeType = any> {

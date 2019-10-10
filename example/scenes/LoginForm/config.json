@@ -1,0 +1,102 @@
+{
+  "page": "FORM",
+  "config": [
+    {
+      "id": "email",
+      "type": "TEXTFIELD",
+      "meta": {
+        "disabled": false,
+        "maxLength": 50,
+        "minLength": 2,
+        "placeholder": "Enter your email",
+        "type": "email",
+        "value": "",
+        "autoComplete": "off"
+      },
+      "validations": [
+        {
+          "type": "REQUIRED"
+        },
+        {
+          "type": "LENGTH",
+          "meta": {
+            "min": 3,
+            "max": 14
+          }
+        }
+      ],
+      "events": {
+        "onChange": [
+          {
+            "type": "SET_VALUE"
+          }
+        ]
+      },
+      "style": {
+        "marginBottom": 10
+      }
+    },
+    {
+      "id": "password",
+      "type": "TEXTFIELD",
+      "meta": {
+        "value": "Password@123",
+        "type": "password",
+        "placeholder": "Enter your password"
+      },
+      "events": {
+        "onChange": {
+          "type": "SET_VALUE"
+        }
+      },
+      "style": {
+        "marginBottom": 10
+      },
+      "validations": [
+        {
+          "type": "REGEX",
+          "meta": {
+            "pattern": "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+          }
+        }
+      ]
+    },
+    {
+      "id": "buttonPanel",
+      "type": "BUTTON_PANEL",
+      "children": [
+        {
+          "id": "registerButton",
+          "type": "BUTTON",
+          "meta": {
+            "label": "Register",
+            "rounded": true
+          },
+          "style": {
+            "marginRight": 10
+          },
+          "disabled": {
+            "type": "CUSTOM",
+            "meta": {
+              "name": "isLoginDisabled"
+            }
+          }
+        },
+        {
+          "id": "loginButton",
+          "type": "BUTTON",
+          "meta": {
+            "label": "Login",
+            "rounded": true
+          },
+          "disabled": {
+            "type": "CUSTOM",
+            "meta": {
+              "name": "isLoginDisabled"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

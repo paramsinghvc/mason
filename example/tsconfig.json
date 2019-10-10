@@ -3,6 +3,7 @@
     "compilerOptions": {
         "jsx": "preserve",
         "baseUrl": "./",
+        "moduleResolution": "node",
         "resolveJsonModule": true,
         "paths": {
             "~*": ["*"]

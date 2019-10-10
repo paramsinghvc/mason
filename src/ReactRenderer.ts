@@ -12,7 +12,7 @@ import React, {
   useRef,
   useImperativeHandle
 } from "react";
-import { IConfigRenderer, IConfig, IConfigNode, IValidationConfig } from "./types";
+import { IConfigRenderer, IConfig, IConfigNode, IValidationConfig, DisabledConfig, ICustomHandlerConfig } from "./types";
 import { handleEvent } from "./eventHandling";
 import { validator } from "./validator";
 
@@ -98,7 +98,11 @@ export type IRendererOptions = {
   dataProcessors?: {
     [k: string]: (a: any) => any;
   };
+  resolvers?: {
+    [k: string]: (a: any) => any;
+  };
   onStateChange?: (state: { [k: string]: any }) => void;
+  onErrorStateChange?: (hasErrors: boolean) => void;
 };
 
 type IRendererContext = {
@@ -120,13 +124,13 @@ const wrappedDispatch = (
   if (isValuedBeingUpdated) {
     const { value, id: fieldId } = payload;
     const validationErrors = validator(validations, value);
-
+    const hasErrors = Object.values(validationErrors).some(Boolean);
     dispatch({
       type: "UPDATE_PROP",
       payload: {
         id: fieldId,
         prop: "validations",
-        value: validationErrors
+        value: { hasErrors, errors: validationErrors }
       }
     });
   }
@@ -136,23 +140,52 @@ const wrappedDispatch = (
   }
 };
 
-function constructStateFromValue(config: IConfigNode, state, values: Map<string, any>) {
+function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state, values: Map<string, any>) {
+  if (Array.isArray(config)) {
+    config.forEach(childConfigNode => constructStateFromValue(childConfigNode, state, values));
+    return state;
+  }
   const { meta, id, children } = config;
   if (values && values.get(id)) {
-    state[id] = { ...(state[id] || {}), value: values.get(id) };
+    state[id] = { ...(state[id] || {}), value: values.get(id), initialValue: values.get(id) };
   } else if (meta && typeof meta.value !== "undefined") {
-    state[id] = { ...(state[id] || {}), value: meta.value };
+    state[id] = { ...(state[id] || {}), value: meta.value, initialValue: meta.value };
   }
+  // if (validations && state[id]) {
+  //   const validationErrors = validator(validations, state[id].value);
+  //   const hasErrors = Object.values(validationErrors).some(Boolean);
+  //   state[id]["isValid"] = hasErrors;
+  // }
   if (children) {
     children.forEach(childConfigNode => constructStateFromValue(childConfigNode, state, values));
   }
   return state;
 }
 
+function determineValidationStatus(config: IConfigNode | IConfigNode[], state: IObject, isValid: boolean) {
+  if (Array.isArray(config)) {
+    return config.reduce(
+      (acc: boolean, configNode: IConfigNode) => acc && determineValidationStatus(configNode, state, isValid),
+      isValid
+    );
+  }
+  if (config.validations) {
+    const validationErrors = validator(config.validations, state[config.id].value);
+    const hasErrors = Object.values(validationErrors).some(Boolean);
+    if (hasErrors) return false;
+  }
+  if (config.children) {
+    return determineValidationStatus(config.children, state, isValid);
+  }
+  return true;
+}
+
 const RootComponentCore: React.ForwardRefExoticComponent<{
   initialState: any;
-}> = forwardRef(({ children, initialState = {} }, ref) => {
+  instance: ReactConfigRenderer;
+}> = forwardRef(({ children, initialState = {}, instance }, ref) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
   useImperativeHandle(
     ref,
     () => ({
@@ -163,6 +196,21 @@ const RootComponentCore: React.ForwardRefExoticComponent<{
     }),
     [state]
   );
+
+  /* Check if any of the current state value hasErrors. And set the root Renderer instance value accordingly */
+  const hasErrors = Object.values(state).some(({ validations }) => validations && validations.hasErrors);
+  if (instance.hasErrors !== hasErrors) {
+    const { onErrorStateChange } = instance.options;
+    onErrorStateChange && onErrorStateChange(hasErrors);
+    instance.hasErrors = hasErrors;
+  }
+
+  /* Check if any of the current state value have been changed and set the pristine flag on the Renderer instance */
+  instance.isPristine = instance.checkIfValuesPristine(state);
+
+  /** A silent flag to check the validation status of the whole form in general by executing validators of
+   * each config node against its corresponding value in the state. */
+  instance.isInvalid = !determineValidationStatus(instance.config.config, state, true);
 
   const props = {
     value: {
@@ -184,13 +232,34 @@ type IObject = {
 
 // const eventsSeedValue = {};
 
+const evaluateDisabledClause = (
+  disabled: boolean | DisabledConfig | ICustomHandlerConfig,
+  { rootState, resolvers, instance }
+) => {
+  if (typeof disabled !== "undefined") {
+    if (typeof disabled === "boolean") return disabled;
+    if (disabled.type) {
+      if (disabled.type === "CUSTOM") {
+        const { meta } = disabled as ICustomHandlerConfig;
+        if (resolvers && resolvers[meta.name]) {
+          return resolvers[meta.name](instance);
+        }
+      }
+      return booleanProcessor(disabled as DisabledConfig, rootState);
+    }
+  }
+};
+
 export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
   private components: Map<string, React.Component> = new Map();
   readonly config: IConfig;
   private elementsMap: Map<string, React.ComponentType<any>>;
-  private options: IObject;
+  public options: IRendererOptions;
   private currentRootStateSnapshot: IObject;
   private rootComponentRef: React.MutableRefObject<any> | null;
+  public hasErrors = false;
+  public isPristine = true;
+  public isInvalid = false;
   constructor(config: IConfig, elementsMap: Map<string, React.ComponentType<any>>, options?: IRendererOptions) {
     this.config = config;
     this.elementsMap = elementsMap;
@@ -200,9 +269,9 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     this.rootComponentRef = null;
   }
   renderConfigNode(node: IConfigNode) {
-    const { id, type, meta = {}, data, events = {}, validations, children, style, show } = node;
-    const { dataProcessors = {}, onStateChange } = this.options;
-    // if (this.components.has(id)) return this.components.get(id);
+    const { id, type, meta = {}, data, events = {}, validations, children, style, show, disabled } = node;
+    const { dataProcessors = {}, onStateChange, resolvers } = this.options;
+
     const elementComponent = this.elementsMap.get(type);
     if (!elementComponent) {
       throw new Error(`No component exists for type ${type}`);
@@ -213,6 +282,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
 
       const rootDispatch = wrappedDispatch(dispatch, validations, { onStateChange });
       this.currentRootStateSnapshot = rootState;
+
       /** Creating the event handlers out of the events config */
       const eventsMap = useMemo(() => {
         return Object.entries(events).reduce((eventsObj, [eventName, eventConfig]) => {
@@ -220,10 +290,10 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
             /** Executing multiple event handlers in case an array is provided against an event type in config */
             if (Array.isArray(eventConfig)) {
               eventConfig.forEach(config => {
-                handleEvent(config, { id, event, dataProcessors, value }, rootDispatch, rootState);
+                handleEvent(config, { id, event, dataProcessors, value, resolvers }, rootDispatch, rootState);
               });
             } else {
-              handleEvent(eventConfig, { id, event, dataProcessors, value }, rootDispatch, rootState);
+              handleEvent(eventConfig, { id, event, dataProcessors, value, resolvers }, rootDispatch, rootState);
             }
           };
           eventsObj[eventName] = eventHandler;
@@ -242,16 +312,18 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
         });
         /** Checking if data key is provided in the config and setting the datasource on component Mount */
         if (data) {
-          handleEvent(data, { id, dataProcessors }, rootDispatch, rootState);
+          handleEvent(data, { id, dataProcessors, resolvers }, rootDispatch, rootState);
         }
       }, []);
+
+      const disabledEvaluated = evaluateDisabledClause(disabled, { rootState, resolvers, instance: this });
 
       /** Constructing the original component by setting its props from the rootState and returning it */
       const component = React.useMemo(
         () =>
           createElement(
             elementComponent,
-            { ...(rootState[id] ? rootState[id] : { ...meta, ...props }), ...eventsMap },
+            { ...(rootState[id] ? rootState[id] : { ...meta, ...props }), disabled: disabledEvaluated, ...eventsMap },
             props.children
           ),
         [rootState[id], eventsMap, props.children]
@@ -287,18 +359,29 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     return el;
   }
 
-  constructInitialState(config: IConfigNode, initialState) {
+  checkIfValuesPristine(rootState: IObject) {
+    return Object.values(rootState).reduce((acc, { value, initialValue }) => {
+      if (typeof initialValue === "undefined") return acc && !value;
+      return acc && JSON.stringify(initialValue) === JSON.stringify(value);
+    }, true);
+  }
+
+  constructInitialState(config: IConfigNode | Array<IConfigNode>, initialState) {
     const { initialValues } = this.options;
     return constructStateFromValue(config, initialState, initialValues);
   }
 
-  getCurrentValuesSnapshot() {
-    return Object.entries(this.currentRootStateSnapshot).reduce((acc, [key, val]) => {
+  getValuesFromState(state: IObject) {
+    return Object.entries(state).reduce((acc, [key, val]) => {
       if (typeof val.value !== "undefined") {
         acc[key] = val.value;
       }
       return acc;
     }, {});
+  }
+
+  getCurrentValuesSnapshot() {
+    return this.getValuesFromState(this.currentRootStateSnapshot);
   }
 
   public setValue(val) {
@@ -312,7 +395,11 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
       const { config } = this.config;
       const initialState = this.constructInitialState(config, {});
       this.rootComponentRef = useRef();
-      return createElement(RootComponent, { initialState, ref: this.rootComponentRef }, [this.renderConfigNode(config)]);
+      return createElement(
+        RootComponent,
+        { initialState, ref: this.rootComponentRef, instance: this },
+        Array.isArray(config) ? config.map(this.renderConfigNode) : [this.renderConfigNode(config)]
+      );
     });
   }
 }

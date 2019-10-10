@@ -13,6 +13,7 @@ interface IOptions {
   event?: Event | null;
   value?: any;
   dataProcessors: {};
+  resolvers: {};
 }
 
 const formQueryString = (queryParams, rootState, selfValue) =>
@@ -25,7 +26,7 @@ const formQueryString = (queryParams, rootState, selfValue) =>
 
 export const handleEvent = (
   eventConfig: IEventsConfig,
-  { id, event = null, dataProcessors, value = undefined }: IOptions,
+  { id, event = null, dataProcessors, value = undefined, resolvers }: IOptions,
   rootDispatch,
   rootState
 ) => {
@@ -198,8 +199,8 @@ export const handleEvent = (
     case "CUSTOM":
       {
         const { meta } = eventConfig as ICustomHandlerConfig;
-        if (dataProcessors && dataProcessors[meta.name]) {
-          dataProcessors[meta.name]({ event, value, id });
+        if (resolvers && resolvers[meta.name]) {
+          resolvers[meta.name]({ event, value, id });
         }
       }
       break;
