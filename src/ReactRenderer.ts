@@ -1,17 +1,5 @@
 /* eslint-disable react/display-name */
-import React, {
-  createContext,
-  memo,
-  useReducer,
-  createElement,
-  useContext,
-  useEffect,
-  useMemo,
-  Dispatch,
-  forwardRef,
-  useRef,
-  useImperativeHandle
-} from "react";
+import * as React from "react";
 import { IConfigRenderer, IConfig, IConfigNode, IValidationConfig, DisabledConfig, ICustomHandlerConfig } from "./types";
 import { handleEvent } from "./eventHandling";
 import { validator } from "./validator";
@@ -19,6 +7,19 @@ import { validator } from "./validator";
 // import produce from "immer";
 import { booleanProcessor } from "./booleanProcessor";
 import { capitalize } from "./shared";
+
+const {
+  createContext,
+  memo,
+  useReducer,
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  forwardRef,
+  useRef,
+  useImperativeHandle
+} = React;
 
 const getWrapperComponentName = (componentId: string) => `${capitalize(componentId)}MasonWrapper`;
 
@@ -107,7 +108,7 @@ export type IRendererOptions = {
 
 type IRendererContext = {
   state: IObject;
-  dispatch: Dispatch<{
+  dispatch: React.Dispatch<{
     type: string;
     payload: any;
   }>;
@@ -180,51 +181,50 @@ function determineValidationStatus(config: IConfigNode | IConfigNode[], state: I
   return true;
 }
 
-const RootComponentCore: React.ForwardRefExoticComponent<{
-  initialState: any;
-  instance: ReactConfigRenderer;
-}> = forwardRef(({ children, initialState = {}, instance }, ref) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const RootComponentCore = forwardRef<any, { initialState: IObject; instance: ReactConfigRenderer }>(
+  ({ children, initialState = {}, instance }, ref) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      setRootState(config: IConfigNode, val) {
-        const newState = constructStateFromValue(config, { ...state }, val);
-        dispatch({ type: "REPLACE_STATE_VALUES", payload: newState });
-      }
-    }),
-    [state]
-  );
+    useImperativeHandle(
+      ref,
+      () => ({
+        setRootState(config: IConfigNode, val) {
+          const newState = constructStateFromValue(config, { ...state }, val);
+          dispatch({ type: "REPLACE_STATE_VALUES", payload: newState });
+        }
+      }),
+      [state]
+    );
 
-  /* Check if any of the current state value hasErrors. And set the root Renderer instance value accordingly */
-  const hasErrors = Object.values(state).some(({ validations }) => validations && validations.hasErrors);
-  if (instance.hasErrors !== hasErrors) {
-    const { onErrorStateChange } = instance.options;
-    onErrorStateChange && onErrorStateChange(hasErrors);
-    instance.hasErrors = hasErrors;
-  }
-
-  /* Check if any of the current state value have been changed and set the pristine flag on the Renderer instance */
-  instance.isPristine = instance.checkIfValuesPristine(state);
-
-  /** A silent flag to check the validation status of the whole form in general by executing validators of
-   * each config node against its corresponding value in the state. */
-  instance.isInvalid = !determineValidationStatus(instance.config.config, state, true);
-
-  const props = {
-    value: {
-      state,
-      dispatch: (action: ActionType) => {
-        dispatch(action);
-        return state;
-      }
+    /* Check if any of the current state value hasErrors. And set the root Renderer instance value accordingly */
+    const hasErrors = Object.values(state).some(({ validations }) => validations && validations.hasErrors);
+    if (instance.hasErrors !== hasErrors) {
+      const { onErrorStateChange } = instance.options;
+      onErrorStateChange && onErrorStateChange(hasErrors);
+      instance.hasErrors = hasErrors;
     }
-  };
-  return createElement(context.Provider, props, children);
-});
 
-export const RootComponent: React.NamedExoticComponent<any> = memo(RootComponentCore);
+    /* Check if any of the current state value have been changed and set the pristine flag on the Renderer instance */
+    instance.isPristine = instance.checkIfValuesPristine(state);
+
+    /** A silent flag to check the validation status of the whole form in general by executing validators of
+     * each config node against its corresponding value in the state. */
+    instance.isInvalid = !determineValidationStatus(instance.config.config, state, true);
+
+    const props = {
+      value: {
+        state,
+        dispatch: (action: ActionType) => {
+          dispatch(action);
+          return state;
+        }
+      }
+    };
+    return createElement(context.Provider, props, children);
+  }
+);
+
+export const RootComponent = memo(RootComponentCore);
 
 type IObject = {
   [k: string]: any;

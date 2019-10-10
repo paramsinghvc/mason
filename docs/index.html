@@ -1,0 +1,598 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@mollycule/mason</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@mollycule/mason</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> @mollycule/mason</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<!-- PROJECT SHIELDS -->
+				<p><a href=""><img src="https://img.shields.io/badge/build-passing-brightgreen.svg?style=for-the-badge" alt="Build Status"></a>
+					<a href="https://choosealicense.com/licenses/mit"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="MIT License"></a>
+					<a href=""><img src="https://img.shields.io/badge/contributors-1-orange.svg?style=for-the-badge" alt="Contributors"></a>
+					<img src="https://img.badgesize.io/paramsinghvc/mason/master/dist/index.js?style=for-the-badge&compression=gzip&label=gzip+size&max=8000&softmax=4000">
+				<a href="https://www.linkedin.com/in/paramsinghvc"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=0077B5" alt="LinkedIn"></a></p>
+				<!-- PROJECT LOGO -->
+				<br />
+				<p align="center">
+					<a href="https://github.com/paramsinghvc/mason">
+						<img src="https://user-images.githubusercontent.com/4329912/59576593-06a31000-90de-11e9-9187-2abbd4009ba4.png" alt="Logo" width="80" height="80">
+					</a>
+					<p style="text-align: center; font-size: 36px; font-weight: 600">Mason</p>
+					<p align="center">
+						Building dynamic, eventful, cohesive config driven UI easily
+						<br />
+						<a href="https://www.npmjs.com/package/@mollycule/mason"><strong>Explore the docs »</strong></a>
+						<br />
+						<br />
+						<p style="text-align: center; font-size: 18px; font-weight: 600">Example Screenshot</p>
+						<p align="center">
+							<img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" width="500" />
+						</p>
+					</p>
+					<p align="center">
+						<a href="https://codesandbox.io/s/mason-demo-0tu4t?fontsize=14">View Demo</a>
+						·
+						<a href="https://github.com/paramsinghvc/mason/issues">Report Bug</a>
+						·
+						<a href="https://github.com/paramsinghvc/mason/issues">Request Feature</a>
+						.
+						<a href="https://www.npmjs.com/package/@mollycule/mason">NPM Link</a>
+					</p>
+				</p>
+				<br/>
+				<!-- TABLE OF CONTENTS -->
+				<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
+					<h2>Table of Contents</h2>
+				</a>
+				<ul>
+					<li><a href="#about-the-project">About the Project</a><ul>
+							<li><a href="#built-with">Built With</a></li>
+						</ul>
+					</li>
+					<li><a href="#getting-started">Getting Started</a><ul>
+							<li><a href="#prerequisites">Prerequisites</a></li>
+							<li><a href="#installation">Installation</a></li>
+						</ul>
+					</li>
+					<li><a href="#usage">Usage</a></li>
+					<li><a href="#configuration">Mason Configuration Semantics</a></li>
+					<li><a href="#contributing">Contributing</a></li>
+					<li><a href="#license">License</a></li>
+					<li><a href="#contact">Contact</a></li>
+					<li><a href="#acknowledgements">Acknowledgements</a></li>
+				</ul>
+				<!-- ABOUT THE PROJECT -->
+				<a href="#about-the-project" id="about-the-project" style="color: inherit; text-decoration: none;">
+					<h2>About The Project</h2>
+				</a>
+				<p><a href="https://example.com"><img src="https://user-images.githubusercontent.com/4329912/59576904-0d7e5280-90df-11e9-868d-dec257ed1626.png" alt="Product Name Screen Shot"></a></p>
+				<p>Mason is a utility built for dynamically rendering UI components, currently for React environment. All it needs to render a complete UI is a JSON describing the type, id and various other parameters like validation clauses, display clauses and event handling by using a configurative DSL.</p>
+				<p>It also needs a map of component type vs React component factories to render the corresponding components mentioned in the config.</p>
+				<a href="#built-with" id="built-with" style="color: inherit; text-decoration: none;">
+					<h3>Built With</h3>
+				</a>
+				<ul>
+					<li><a href="https://www.typescriptlang.org/">TypeScript</a></li>
+					<li><a href="https://webpack.js.org/">Webpack</a></li>
+				</ul>
+				<!-- GETTING STARTED -->
+				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+					<h2>Getting Started</h2>
+				</a>
+				<a href="#prerequisites" id="prerequisites" style="color: inherit; text-decoration: none;">
+					<h3>Prerequisites</h3>
+				</a>
+				<p>Following Peer Dependencies are required for using mason package:</p>
+				<ul>
+					<li>react: &quot;^16.8.6&quot;</li>
+				</ul>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h3>Installation</h3>
+				</a>
+				<pre><code class="language-sh">npm i @mollycule/mason -S</code></pre>
+				<p>or</p>
+				<pre><code class="language-sh">yarn add @mollycule/mason</code></pre>
+				<!-- USAGE EXAMPLES -->
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<ol>
+					<li>Build the mason config for rendering the UI as per your needs.</li>
+				</ol>
+				<pre><code class="language-json">{
+  <span class="hljs-attr">"page"</span>: <span class="hljs-string">"HOME"</span>,
+  <span class="hljs-attr">"config"</span>: {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"HomePageLayout"</span>,
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"PAGE_LAYOUT"</span>,
+    <span class="hljs-attr">"children"</span>: [
+      {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"firstSearchInput"</span>,
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"SEARCH_INPUT"</span>,
+        <span class="hljs-attr">"meta"</span>: {
+          <span class="hljs-attr">"disabled"</span>: <span class="hljs-string">"false"</span>,
+          <span class="hljs-attr">"maxLength"</span>: <span class="hljs-number">50</span>,
+          <span class="hljs-attr">"minLength"</span>: <span class="hljs-number">5</span>,
+          <span class="hljs-attr">"placeholder"</span>: <span class="hljs-string">"Type here to search"</span>
+        },
+        <span class="hljs-attr">"validations"</span>: [
+          {
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REQUIRED"</span>
+          },
+          {
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REGEX"</span>,
+            <span class="hljs-attr">"meta"</span>: {
+              <span class="hljs-attr">"pattern"</span>: <span class="hljs-string">"^\\w{3}\\d{0,2}$"</span>
+            }
+          },
+          {
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"CUSTOM"</span>,
+            <span class="hljs-attr">"meta"</span>: {
+              <span class="hljs-attr">"functionName"</span>: <span class="hljs-string">"validateSearch"</span>
+            }
+          }
+        ],
+        <span class="hljs-attr">"events"</span>: {
+          <span class="hljs-attr">"change"</span>: [
+            {
+              <span class="hljs-attr">"type"</span>: <span class="hljs-string">"AJAX_CALL"</span>,
+              <span class="hljs-attr">"meta"</span>: {
+                <span class="hljs-attr">"endpoint"</span>: <span class="hljs-string">"/data/chart-data/${0}/foo/${1}"</span>,
+                <span class="hljs-attr">"urlParams"</span>: [<span class="hljs-string">"firstSearchInput"</span>, <span class="hljs-string">"&lt;fieldIdHere&gt;"</span>],
+                <span class="hljs-attr">"queryParams"</span>: {
+                  <span class="hljs-attr">"foo"</span>: <span class="hljs-string">"&lt;FieldIdHere&gt;"</span>,
+                  <span class="hljs-attr">"bar"</span>: <span class="hljs-string">"&lt;FieldIdHere&gt;"</span>
+                },
+                <span class="hljs-attr">"fieldId"</span>: <span class="hljs-string">"&lt;FieldId of the field whose data we want to set&gt;"</span>
+              }
+            }
+          ],
+          <span class="hljs-attr">"click"</span>: {
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"SET_DATA"</span>,
+            <span class="hljs-attr">"meta"</span>: {
+              <span class="hljs-attr">"fieldId"</span>: <span class="hljs-string">"&lt;FieldId&gt;"</span>,
+              <span class="hljs-attr">"valueField"</span>: <span class="hljs-string">"&lt;FieldId&gt;"</span>,
+              <span class="hljs-attr">"value"</span>: <span class="hljs-string">"abc"</span>
+            }
+          }
+        }
+      },
+      {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"myListBox"</span>,
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"LIST_GROUP"</span>,
+        <span class="hljs-attr">"meta"</span>: {
+          <span class="hljs-attr">"groupHeading"</span>: <span class="hljs-string">"Lorem Ipsum"</span>,
+          <span class="hljs-attr">"groupSubHeading"</span>: <span class="hljs-string">"A foxtrot above my head"</span>
+        },
+        <span class="hljs-attr">"data"</span>: {
+          <span class="hljs-attr">"type"</span>: <span class="hljs-string">"AJAX_CALL"</span>,
+          <span class="hljs-attr">"meta"</span>: {
+            <span class="hljs-attr">"endpoint"</span>: <span class="hljs-string">"/data/chart-data/${0}/foo/${1}"</span>,
+            <span class="hljs-attr">"queryParams"</span>: {
+              <span class="hljs-attr">"foo"</span>: <span class="hljs-string">"&lt;FieldIdHere&gt;"</span>,
+              <span class="hljs-attr">"bar"</span>: <span class="hljs-string">"hardcodedText"</span>
+            }
+          }
+        }
+      }
+    ]
+  }
+}</code></pre>
+				<ol start="2">
+					<li>Make use of <code>ReactRenderer</code> to build the UI based on the config you created in previous step as</li>
+				</ol>
+				<pre><code class="language-tsx">import { ReactConfigRenderer } from &quot;@mollycule/mason&quot;;
+const homePageRenderer = new ReactConfigRenderer(
+  config,
+  new Map([
+    [&quot;PAGE_LAYOUT&quot;, HomePageLayout], 
+    [&quot;SEARCH_INPUT&quot;, Search],
+    [&quot;RECIPES_LIST_GROUP&quot;, Recipes]
+  ]),
+  {
+    dataProcessors: {
+      recipeDataSourceProcessor(dataSource) {
+        return dataSource.hits.map(h =&gt; h.recipe);
+      }
+    }
+  }
+);
+
+const App = () =&gt; &lt;main&gt;{homePageRenderer.render()}&lt;/main&gt;;
+
+ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code></pre>
+				<!-- CONFIGURATION -->
+				<a href="#mason-configuration" id="mason-configuration" style="color: inherit; text-decoration: none;">
+					<h2>Mason Configuration</h2>
+				</a>
+				<p>Below is the detailed configuration options that can be done using Mason.</p>
+				<a href="#1-root-node" id="1-root-node" style="color: inherit; text-decoration: none;">
+					<h4>1. Root Node</h4>
+				</a>
+				<pre><code class="language-json">  {
+  <span class="hljs-attr">"page"</span>: <span class="hljs-string">"RECIPES"</span>,
+  <span class="hljs-attr">"config"</span>: {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"HomePageLayout"</span>,
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"PAGE_LAYOUT"</span>,
+    <span class="hljs-attr">"style"</span>: {
+      <span class="hljs-attr">"display"</span>: <span class="hljs-string">"grid"</span>
+    },
+    <span class="hljs-attr">"children"</span>: [...]
+  }</code></pre>
+				<p>The root node has a little different structure than rest of the nodes. It has two properties as <code>page</code> and <code>config</code> which basically represents the page or route of your web app you&#39;re trying to configure the UI for. That said, mason is not limited to page levels only. You can use it to created nested UI as well.</p>
+				<a href="#2-component-node" id="2-component-node" style="color: inherit; text-decoration: none;">
+					<h4>2. Component Node</h4>
+				</a>
+				<pre><code class="language-json">  {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"&lt;Unique Component Id&gt;"</span>,
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"&lt;Component Type&gt;"</span>,
+    <span class="hljs-attr">"meta"</span>: {
+      <span class="hljs-attr">"disabled"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attr">"maxLength"</span>: <span class="hljs-number">50</span>,
+      <span class="hljs-attr">"placeholder"</span>: <span class="hljs-string">"Type here to search"</span>,
+    },
+    <span class="hljs-attr">"show"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"validations"</span>: [],
+    <span class="hljs-attr">"events"</span>: {},
+    <span class="hljs-attr">"data"</span>: {},    
+    <span class="hljs-attr">"style"</span>: {
+      <span class="hljs-attr">"display"</span>: <span class="hljs-string">"grid"</span>
+    },
+    <span class="hljs-attr">"children"</span>: [...]
+  }</code></pre>
+				<ol>
+					<li><p><strong><code>id</code></strong> field represents the element id used to uniquely identify the current state and updations for a given element. Make sure to keep it unique since this drives any updations during prop change of a given component</p>
+					</li>
+					<li><p><strong><code>type</code></strong> field will help render the corresponding component during the render phase. It&#39;ll get matched against the components mapping that&#39;s passed while creating the renderer during usage.</p>
+						<pre><code class="language-tsx">   const homePageRenderer = new ReactConfigRenderer(
+     config,
+     new Map([
+       [&quot;PAGE_LAYOUT&quot;, HomePageLayout], 
+       [&quot;SEARCH_INPUT&quot;, SearchInput],
+       [&quot;RECIPES_LIST_GROUP&quot;, RecipesListGroup],
+       [&quot;FOO&quot;, () =&gt; &lt;p&gt;foo&lt;/p&gt;]
+     ])
+   );</code></pre>
+					</li>
+					<li><p><strong><code>meta</code></strong> field can be used to pass any properties to an UI Component that&#39;ll be added as inline props to the component being rendered. You can pass component props or normal HTML element props in it.
+						<i>Note: Setting up <code>value</code> property in <code>meta</code> is helpful when you want to make your component controllable to avoid React warnings</i></p>
+					</li>
+					<li><p><strong><code>show</code></strong> property will completely unmount or not render the component in the first place if it evaluated to falsy. It can accept either a boolean or a boolean confguration as</p>
+						<pre><code class="language-json">   {
+     <span class="hljs-attr">"operator"</span>: <span class="hljs-string">"!="</span>,
+     <span class="hljs-attr">"leftOperand"</span>: <span class="hljs-string">"&lt;%statesDropdown%&gt;"</span>,
+     <span class="hljs-attr">"rightOperand"</span>: <span class="hljs-string">"[]"</span>,
+     <span class="hljs-attr">"type"</span>: <span class="hljs-string">"ATOMIC"</span>
+   }</code></pre>
+						<p> Here, it&#39;ll evaluate the boolean operation as <code>&lt;Value of statesDropdown&gt; != []</code> and determine the value of <code>show</code>.</p>
+						<br/>
+						<p> The detailed sturcture of <code>BooleanConfig</code> can be understood as the TS type below:</p>
+						<pre><code class="language-ts"> <span class="hljs-keyword">type</span> BooleanConfig = {
+   <span class="hljs-keyword">type</span>: OperationType;
+   operator: ComparisonOperators | CompoundOperators;
+   leftOperand: <span class="hljs-built_in">string</span> | BooleanConfig;
+   rightOperand: <span class="hljs-built_in">string</span> | BooleanConfig;
+ };</code></pre>
+						<p> <code>ComparisonOperators</code> and <code>CompoundOperators</code> are discussed in detail further.</p>
+					</li>
+					<li><p><strong><code>style</code></strong> property simply represents inline styles object passed in the Component.</p>
+					</li>
+					<li><p><strong><code>data</code></strong> property will work as onMount fetching of data. You can specify a remote data source to fetch data asynchronously or set it statically.</p>
+						<ul>
+							<li><strong><code>AJAX_CALL</code></strong>: The most common scenario is of loading data on mount of a given component. <code>type</code> attribute set to <code>AJAX_CALL</code> is meant to handle the same. On successful ajax call, it&#39;ll set the <strong><code>datasource</code></strong> prop on the component. Also, when the Ajax call starts, a <strong><code>loading</code></strong> prop is set to <code>true</code> on the component and set as <code>false</code> on promise settling (either resolved or caught).<pre><code class="language-json">  {
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"AJAX_CALL"</span>,
+    <span class="hljs-attr">"meta"</span>: {
+      <span class="hljs-attr">"endpoint"</span>: <span class="hljs-string">"https://api.edamam.com/search"</span>,
+      <span class="hljs-attr">"queryParams"</span>: {
+        <span class="hljs-attr">"q"</span>: <span class="hljs-string">"egg"</span>,
+        <span class="hljs-attr">"app_id"</span>: <span class="hljs-string">"&lt;app id&gt;"</span>,
+        <span class="hljs-attr">"app_key"</span>: <span class="hljs-string">"&lt;app key&gt;"</span>,
+        <span class="hljs-attr">"foo"</span>: <span class="hljs-string">"&lt;%fieldId%&gt;"</span>,
+      },
+      <span class="hljs-attr">"credentials"</span>: <span class="hljs-string">"include"</span>,
+      <span class="hljs-attr">"fieldId"</span>: <span class="hljs-string">"recipesListComponent"</span>,
+      <span class="hljs-attr">"dataProcessor"</span>: <span class="hljs-string">"recipeDataSourceProcessor"</span>
+    }
+  }</code></pre>
+								<ul>
+									<li>In the <strong><code>meta</code></strong> config, you can pass things like the <strong><code>endpoint</code></strong> and dynamic query params can be passed as the key value pairs to it.</li>
+									<li><strong><code>queryParams</code></strong> property can incorporate query params value to be set from another component value by enclosing the desired <code>componentId</code> or <code>fieldId</code> in special syntax as <strong><code>&lt;%fieldId%&gt;</code></strong>. It&#39;ll dynamically take the current value of that component and interpolate it here to make the Ajax Call.</li>
+									<li><strong><code>credentials</code></strong> property can be set to control sending same or cross origin <a href="https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials">cookies</a></li>
+									<li><strong><code>fieldId</code></strong> property can be used to tell which component <code>datasource</code> prop you want to set.</li>
+									<li><strong><code>dataProcessor</code></strong>: It might be the case that you want to massage or prune the ajax data before applying it to your component. So, you can tailor the data received as per your component needs by passing a function name here that can be referred from the paramters passed by the caller of the mason renderer as:<pre><code class="language-js">dataProcessors: {
+  recipeDataSourceProcessor(dataSource) {
+    <span class="hljs-keyword">return</span> dataSource.hits.map(<span class="hljs-function"><span class="hljs-params">h</span> =&gt;</span> h.recipe);
+  }
+}</code></pre>
+									It&#39;s like a resolver function that&#39;ll be called before applying the datasource prop to the component.</li>
+									<li><strong><code>fieldIds</code></strong> is an object that contains key value pairs of fieldIds and their corresponding dataProcessors. It&#39;s useful in the cases where in the root level you wanna make an ajax call and set the children&#39;s data based on extracting properties from it.</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ol>
+				<pre><code>- &lt;strong&gt;`SET_DATASOURCE`&lt;/strong&gt;: <span class="hljs-keyword">To</span> statically <span class="hljs-keyword">set</span> the datasource <span class="hljs-keyword">of</span> the <span class="hljs-keyword">current</span> component <span class="hljs-keyword">or</span> <span class="hljs-keyword">some</span> other component <span class="hljs-keyword">by</span> specifying the optional `fieldId`.
+  ```<span class="hljs-type">json</span>
+  {
+    "type": "SET_DATASOURCE",
+    "meta": {
+      "data": ["foo", "bar"],
+      "fieldId": "&lt;fieldIdToSetDataSourceFor&gt;"
+    }
+  }
+  ``` 
+- &lt;strong&gt;`SET_VALUE`&lt;/strong&gt;: <span class="hljs-keyword">In</span> <span class="hljs-keyword">case</span> you want <span class="hljs-keyword">to</span> <span class="hljs-keyword">set</span> the <span class="hljs-keyword">value</span> <span class="hljs-keyword">of</span> the <span class="hljs-keyword">current</span> component <span class="hljs-keyword">or</span> <span class="hljs-keyword">some</span> other component <span class="hljs-keyword">on</span> mount <span class="hljs-keyword">of</span> <span class="hljs-keyword">current</span> component.
+  ```<span class="hljs-type">json</span>
+  {
+    "type": "SET_VALUE",
+    "meta": {
+      "value": "foo",
+      "fieldId": "&lt;fieldIdToSetValueFor&gt;"
+    }
+  }
+  ``` 
+- &lt;strong&gt;`CUSTOM`&lt;/strong&gt;: <span class="hljs-keyword">When</span> you want <span class="hljs-keyword">to</span> <span class="hljs-keyword">execute</span> a custom <span class="hljs-keyword">function</span> <span class="hljs-keyword">on</span> mount <span class="hljs-keyword">of</span> the component. 
+  ```<span class="hljs-type">json</span>
+  {
+    "type": "CUSTOM",
+    "meta": {
+      "name": "&lt;nameOfTheCustomFunction&gt;"
+    }
+  }
+  ``` 
+  The Custom <span class="hljs-keyword">function</span> needs <span class="hljs-keyword">to</span> be passed <span class="hljs-keyword">in</span> the `dataProcessors` map <span class="hljs-keyword">while</span> creating the renderer. It<span class="hljs-string">'ll be called with one parameter as `({ event, value, id })` from which the values can be destructured during invocation.</span></code></pre><ol start="6">
+					<li><p><strong><code>events</code></strong> property can either accept a map of event name vs their handlers configuration. Each event could have multiple handlers, hence both the array config and object config is supported. Below is the TypeScript typing for the same.</p>
+						<pre><code class="language-ts"> events?: {
+   [eventName: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">Array</span>&lt;IEventsConfig&gt; | IEventsConfig;
+ }</code></pre>
+						<p> Eg:</p>
+						<pre><code class="language-json"> "events": {
+   "onChange": [
+     {
+       "type": "SET_VALUE"
+     },
+     {
+       "type": "AJAX_CALL",
+       "meta": {
+         "endpoint": "https://api.edamam.com/search",
+         "queryParams": {
+           "q": "&lt;%SELF%&gt;",
+           "app_id": "&lt;APP_ID&gt;"
+         },
+         "dataProcessor": "recipeDataSourceProcessor",
+         "fieldId": "recipesListGroup"
+       },
+       "when": {
+         "operator": "=",
+         "leftOperand": "&lt;%secondSearchInput%&gt;",
+         "rightOperand": "",
+         "type": "ATOMIC"
+       }
+     }
+   ],
+   "onFocus": {
+     "type": "SET_VALUE",
+     "meta": {
+       "value": [],
+       "fieldId": "&lt;fieldIdToSetValueFor&gt;"
+     }
+   },
+   "onClick": [
+     {
+       "type": "SET_DATASOURCE",
+       "meta": {
+         "data": [],
+         "fieldId": "&lt;fieldIdToSetDataSourceFor&gt;"
+       }
+     },
+     {
+       "type": "CUSTOM",
+       "meta": {
+         "name": "&lt;customFunctionNameHere&gt;"
+       }
+     }
+   ]
+ }</code></pre>
+						<p> Here, the <strong><code>onChange</code></strong> event of the component will execute two event handlers viz set value of itself (required for controlled components - same as setState the value), and the other one makes an ajax call to a remote api to fetch data of a listing component based on the query text entered in the current/self component.
+							Note how the query param is able to take <strong><code>&lt;%SELF%&gt;</code></strong> as it&#39;s value. It&#39;s a special value to get the current value of the current component in consideration. You could pass the id of the self component here as well, but it&#39;ll give a stale value since this is the event handler which will change it in the end.
+						The <strong><code>when</code></strong> clause is a conditional clause which is discussed in detail further.</p>
+						<p> Next, the <strong><code>onFocus</code></strong> event is executing a single handler to set the datasource property of the given <code>fieldId</code>. No need to pass an array form here.</p>
+						<p> And, the <strong><code>onClick</code></strong> event is useful in case of a button component wherein you want to execute a custom event handler by matching it&#39;s name against what was passed in the <code>dataProcessors</code> property while creating the Renderer.</p>
+					</li>
+				</ol>
+				<ol start="8">
+					<li><strong><code>validations</code></strong> can be used to configure the form validations on a given component. It&#39;s very useful in case of rendering forms. </li>
+				</ol>
+				<!-- CONTRIBUTING -->
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<p>Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are <strong>greatly appreciated</strong>.</p>
+				<ol>
+					<li>Fork the Project</li>
+					<li>Create your Feature Branch (<code>git checkout -b feature/AmazingFeature</code>)</li>
+					<li>Commit your Changes (<code>git commit -m &#39;Add some AmazingFeature</code>)</li>
+					<li>Push to the Branch (<code>git push origin feature/AmazingFeature</code>)</li>
+					<li>Open a Pull Request</li>
+				</ol>
+				<!-- LICENSE -->
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>Distributed under the MIT License. See <code>LICENSE</code> for more information.</p>
+				<!-- CONTACT -->
+				<a href="#contact" id="contact" style="color: inherit; text-decoration: none;">
+					<h2>Contact</h2>
+				</a>
+				<p>Param Singh - <a href="https://github.com/paramsinghvc">@paramsinghvc</a> - <a href="mailto:paramsinghvc@gmail.com">paramsinghvc@gmail.com</a></p>
+				<p>Project Link: <a href="https://github.com/paramsinghvc/mason">https://github.com/paramsinghvc/mason</a></p>
+				<!-- ACKNOWLEDGEMENTS -->
+				<a href="#acknowledgements" id="acknowledgements" style="color: inherit; text-decoration: none;">
+					<h2>Acknowledgements</h2>
+				</a>
+				<ul>
+					<li><a href="https://shields.io">Img Shields</a></li>
+				</ul>
+				<!-- MARKDOWN LINKS & IMAGES -->
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_reactrenderer_.html">"<wbr>React<wbr>Renderer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_booleanprocessor_.html">"boolean<wbr>Processor"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_eventhandling_.html">"event<wbr>Handling"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_shared_.html">"shared"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_.html">"types"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_validator_.html">"validator"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

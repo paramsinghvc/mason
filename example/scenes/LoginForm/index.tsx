@@ -25,7 +25,7 @@ const LoginForm = () => {
       config,
       new Map([["PAGE_LAYOUT", TextField], ["TEXTFIELD", TextField], ["BUTTON", Button], ["BUTTON_PANEL", ButtonPanel]]),
       {
-        initialValues: new Map([["email", "pa"]]),
+        initialValues: new Map([["email", "paramsinghvc@gmail.com"]]),
         onErrorStateChange(hasErrors: boolean) {
           setDoesFormHasErrors(hasErrors);
         },

@@ -4,6 +4,7 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import DtsBundlePlugin from "@ahrakio/witty-webpack-declaration-files";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import CompressionWebpackPlugin from "compression-webpack-plugin";
+import TypedocWebpackPlugin from "typedoc-webpack-plugin";
 
 const config: webpack.Configuration = {
   entry: path.resolve(__dirname, "./src/index.ts"),
@@ -46,7 +47,13 @@ const config: webpack.Configuration = {
     new CleanWebpackPlugin({
       verbose: true
     }),
-    new DtsBundlePlugin({ merge: true })
+    new DtsBundlePlugin({ merge: true }),
+    new TypedocWebpackPlugin(
+      {
+        out: path.resolve(__dirname, "docs")
+      },
+      "./src"
+    )
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"]

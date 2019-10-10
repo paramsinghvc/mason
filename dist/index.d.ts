@@ -8,35 +8,54 @@ export declare type IRendererOptions = {
     dataProcessors?: {
         [k: string]: (a: any) => any;
     };
+    resolvers?: {
+        [k: string]: (a: any) => any;
+    };
     onStateChange?: (state: {
         [k: string]: any;
     }) => void;
+    onErrorStateChange?: (hasErrors: boolean) => void;
 };
-export declare const RootComponent: React.NamedExoticComponent<any>;
+export declare const RootComponent: React.MemoExoticComponent<React.ForwardRefExoticComponent<{
+    initialState: IObject;
+    instance: ReactConfigRenderer;
+} & React.RefAttributes<any>>>;
+declare type IObject = {
+    [k: string]: any;
+};
 export declare class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     private components;
     readonly config: IConfig;
     private elementsMap;
-    private options;
+    options: IRendererOptions;
     private currentRootStateSnapshot;
     private rootComponentRef;
+    hasErrors: boolean;
+    isPristine: boolean;
+    isInvalid: boolean;
     constructor(config: IConfig, elementsMap: Map<string, React.ComponentType<any>>, options?: IRendererOptions);
     renderConfigNode(node: IConfigNode): any;
-    constructInitialState(config: IConfigNode, initialState: any): any;
+    checkIfValuesPristine(rootState: IObject): any;
+    constructInitialState(config: IConfigNode | Array<IConfigNode>, initialState: any): any;
+    getValuesFromState(state: IObject): {};
     getCurrentValuesSnapshot(): {};
     setValue(val: any): void;
-    render(): any;
+    render(): React.MemoExoticComponent<() => React.FunctionComponentElement<{
+        initialState: IObject;
+        instance: ReactConfigRenderer;
+    } & React.RefAttributes<any>>>;
 }
 
-export declare const booleanProcessor: (booleanClause: boolean | BooleanConfig, rootState: any, selfValue?: any) => boolean;
+export declare const booleanProcessor: (booleanClause: boolean | import("./types").ConditionalConfig, rootState: any, selfValue?: any) => boolean;
 
 interface IOptions {
     id: string;
     event?: Event | null;
     value?: any;
     dataProcessors: {};
+    resolvers: {};
 }
-export declare const handleEvent: (eventConfig: IEventsConfig, { id, event, dataProcessors, value }: IOptions, rootDispatch: any, rootState: any) => void;
+export declare const handleEvent: (eventConfig: IEventsConfig, { id, event, dataProcessors, value, resolvers }: IOptions, rootDispatch: any, rootState: any) => void;
 
 export * from "./ReactRenderer";
 
@@ -66,12 +85,14 @@ export declare enum OperationType {
     ATOMIC = "ATOMIC",
     COMPOUND = "COMPOUND"
 }
-export declare type BooleanConfig = {
+export declare type ConditionalConfig = {
     type: OperationType;
     operator: ComparisonOperators | CompoundOperators;
-    leftOperand: string | BooleanConfig;
-    rightOperand: string | BooleanConfig;
+    leftOperand: string | ConditionalConfig;
+    rightOperand: string | ConditionalConfig;
 };
+export declare type BooleanConfig = ConditionalConfig;
+export declare type DisabledConfig = ConditionalConfig;
 /** Boolean Configs */
 /** Validator Types */
 export declare enum ValidationTypes {
@@ -133,6 +154,7 @@ export interface IConfigNode {
     meta?: any;
     style?: any;
     show?: boolean | BooleanConfig;
+    disabled?: boolean | DisabledConfig | ICustomHandlerConfig;
     validations?: Array<IValidationConfig>;
     events?: {
         [eventName: string]: Array<IEventsConfig> | IEventsConfig;
@@ -141,7 +163,7 @@ export interface IConfigNode {
 }
 export interface IConfig {
     page: string;
-    config: IConfigNode;
+    config: IConfigNode | Array<IConfigNode>;
 }
 export interface IConfigRenderer<ReturnNodeType = any> {
     readonly config: IConfig;
