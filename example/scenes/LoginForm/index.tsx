@@ -7,6 +7,7 @@ import TextField from "~components/TextField";
 import Button from "~components/Button";
 import ButtonPanel from "~components/ButtonPanel";
 import config from "./config.json";
+import { IConfig } from "~../src/types";
 
 const Holder = styled.main`
   border: 2px solid grey;
@@ -19,10 +20,10 @@ const Holder = styled.main`
 `;
 
 const LoginForm = () => {
-  const [doesFormHasErrors, setDoesFormHasErrors] = useState(false);
+  const [, setDoesFormHasErrors] = useState(false);
   const loginFormRenderer = useMemo(() => {
     return new ReactConfigRenderer(
-      config,
+      config as IConfig,
       new Map([["PAGE_LAYOUT", TextField], ["TEXTFIELD", TextField], ["BUTTON", Button], ["BUTTON_PANEL", ButtonPanel]]),
       {
         initialValues: new Map([["email", "paramsinghvc@gmail.com"]]),

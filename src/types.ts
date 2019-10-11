@@ -118,3 +118,28 @@ export interface IConfigRenderer<ReturnNodeType = any> {
   readonly config: IConfig;
   render: () => ReturnNodeType;
 }
+
+export type IObject = {
+  [k: string]: any;
+};
+
+export type State = {
+  [id: string]: {
+    value: any;
+    initialValue: any;
+    validations?: {
+      hasErrors: boolean;
+      errors: IObject;
+    };
+    [key: string]: any;
+  };
+};
+
+export type StateReturnableDispatch<A> = (value: A) => State;
+
+export type ActionType = {
+  type: string;
+  payload: any;
+};
+
+export type Dispatch = StateReturnableDispatch<ActionType>;

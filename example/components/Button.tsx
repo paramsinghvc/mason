@@ -1,9 +1,9 @@
-import React, { SFC } from "react";
+import React, { FC } from "react";
 import styled from "@emotion/styled";
 
 export type buttonSizeType = "small" | "medium" | "large" | "x-large";
 export interface IButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   label?: string;
   rounded?: boolean;
@@ -61,7 +61,7 @@ const Button = styled.button<IButtonProps & Partial<typeof defaultProps>>`
   }
 `;
 
-const ButtonComp: SFC<IButtonProps> = props => (
+const ButtonComp: FC<IButtonProps> = props => (
   <Button onClick={props.onClick} {...props}>
     {props.children || props.label}
   </Button>

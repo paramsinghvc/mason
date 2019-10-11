@@ -1,6 +1,16 @@
 /* eslint-disable react/display-name */
 import * as React from "react";
-import { IConfigRenderer, IConfig, IConfigNode, IValidationConfig, DisabledConfig, ICustomHandlerConfig } from "./types";
+import {
+  IConfigRenderer,
+  IConfig,
+  IConfigNode,
+  IValidationConfig,
+  DisabledConfig,
+  ICustomHandlerConfig,
+  State,
+  Dispatch,
+  ActionType
+} from "./types";
 import { handleEvent } from "./eventHandling";
 import { validator } from "./validator";
 
@@ -22,11 +32,6 @@ const {
 } = React;
 
 const getWrapperComponentName = (componentId: string) => `${capitalize(componentId)}MasonWrapper`;
-
-export type ActionType = {
-  type: string;
-  payload: any;
-};
 
 /*
 const immerReducer = (state, { type, payload }) => {
@@ -56,7 +61,7 @@ const immerReducer = (state, { type, payload }) => {
 };
 */
 
-const reducer = (state, { type, payload }) => {
+const reducer = (state: State, { type, payload }) => {
   switch (type) {
     case "ADD_ENTRY":
       return {
@@ -102,22 +107,19 @@ export type IRendererOptions = {
   resolvers?: {
     [k: string]: (a: any) => any;
   };
-  onStateChange?: (state: { [k: string]: any }) => void;
+  onStateChange?: (state: State) => void;
   onErrorStateChange?: (hasErrors: boolean) => void;
 };
 
 type IRendererContext = {
-  state: IObject;
-  dispatch: React.Dispatch<{
-    type: string;
-    payload: any;
-  }>;
+  state: State;
+  dispatch: Dispatch;
 };
 
 const context = createContext<IRendererContext>(null as any);
 
 const wrappedDispatch = (
-  dispatch: React.Dispatch<ActionType>,
+  dispatch: Dispatch,
   validations: Array<IValidationConfig> = [],
   options?: { onStateChange?: IRendererOptions["onStateChange"] }
 ) => ({ type, payload }) => {
@@ -139,9 +141,10 @@ const wrappedDispatch = (
   if (options && options.onStateChange && isValuedBeingUpdated) {
     options.onStateChange(reducer(state, { type, payload }));
   }
+  return state;
 };
 
-function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state, values: Map<string, any>) {
+function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state: State, values: Map<string, any>) {
   if (Array.isArray(config)) {
     config.forEach(childConfigNode => constructStateFromValue(childConfigNode, state, values));
     return state;
@@ -163,7 +166,7 @@ function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state
   return state;
 }
 
-function determineValidationStatus(config: IConfigNode | IConfigNode[], state: IObject, isValid: boolean) {
+function determineValidationStatus(config: IConfigNode | IConfigNode[], state: State, isValid: boolean) {
   if (Array.isArray(config)) {
     return config.reduce(
       (acc: boolean, configNode: IConfigNode) => acc && determineValidationStatus(configNode, state, isValid),
@@ -181,7 +184,7 @@ function determineValidationStatus(config: IConfigNode | IConfigNode[], state: I
   return true;
 }
 
-const RootComponentCore = forwardRef<any, { initialState: IObject; instance: ReactConfigRenderer }>(
+const RootComponentCore = forwardRef<any, { initialState: State; instance: ReactConfigRenderer }>(
   ({ children, initialState = {}, instance }, ref) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -226,10 +229,6 @@ const RootComponentCore = forwardRef<any, { initialState: IObject; instance: Rea
 
 export const RootComponent = memo(RootComponentCore);
 
-type IObject = {
-  [k: string]: any;
-};
-
 // const eventsSeedValue = {};
 
 const evaluateDisabledClause = (
@@ -255,7 +254,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
   readonly config: IConfig;
   private elementsMap: Map<string, React.ComponentType<any>>;
   public options: IRendererOptions;
-  private currentRootStateSnapshot: IObject;
+  private currentRootStateSnapshot: State;
   private rootComponentRef: React.MutableRefObject<any> | null;
   public hasErrors = false;
   public isPristine = true;
@@ -359,7 +358,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     return el;
   }
 
-  checkIfValuesPristine(rootState: IObject) {
+  checkIfValuesPristine(rootState: State) {
     return Object.values(rootState).reduce((acc, { value, initialValue }) => {
       if (typeof initialValue === "undefined") return acc && !value;
       return acc && JSON.stringify(initialValue) === JSON.stringify(value);
@@ -371,7 +370,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     return constructStateFromValue(config, initialState, initialValues);
   }
 
-  getValuesFromState(state: IObject) {
+  getValuesFromState(state: State) {
     return Object.entries(state).reduce((acc, [key, val]) => {
       if (typeof val.value !== "undefined") {
         acc[key] = val.value;

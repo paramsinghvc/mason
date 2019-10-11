@@ -10,6 +10,6 @@
         "target": "esnext",
         "module": "esnext"
       },
-    "include": ["**/*.tsx?"],
+    "include": ["**/*"],
     "exclude": ["node_modules"]
 }

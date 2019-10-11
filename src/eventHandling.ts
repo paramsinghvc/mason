@@ -3,7 +3,9 @@ import {
   IDataSetDatasourceConfig,
   IDataSetValueConfig,
   IEventsConfig,
-  ICustomHandlerConfig
+  ICustomHandlerConfig,
+  State,
+  Dispatch
 } from "./types";
 import { processValue } from "./shared";
 import { booleanProcessor } from "./booleanProcessor";
@@ -16,7 +18,7 @@ interface IOptions {
   resolvers: {};
 }
 
-const formQueryString = (queryParams, rootState, selfValue) =>
+const formQueryString = (queryParams, rootState: State, selfValue) =>
   Object.entries(queryParams)
     .reduce((acc: Array<string>, [key, value]) => {
       acc.push(`${key}=${processValue(value as string, rootState, selfValue)}`);
@@ -27,8 +29,8 @@ const formQueryString = (queryParams, rootState, selfValue) =>
 export const handleEvent = (
   eventConfig: IEventsConfig,
   { id, event = null, dataProcessors, value = undefined, resolvers }: IOptions,
-  rootDispatch,
-  rootState
+  rootDispatch: Dispatch,
+  rootState: State
 ) => {
   const { type, when } = eventConfig;
 
