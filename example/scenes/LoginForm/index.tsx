@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 
@@ -20,7 +20,7 @@ const Holder = styled.main`
 `;
 
 const LoginForm = () => {
-  const [, setDoesFormHasErrors] = useState(false);
+  const [doesFormHasErrors, setDoesFormHasErrors] = useState(false);
   const loginFormRenderer = useMemo(() => {
     return new ReactConfigRenderer(
       config as IConfig,
@@ -28,17 +28,16 @@ const LoginForm = () => {
       {
         initialValues: new Map([["email", "paramsinghvc@gmail.com"]]),
         onErrorStateChange(hasErrors: boolean) {
-          setDoesFormHasErrors(hasErrors);
-        },
-        resolvers: {
-          isLoginDisabled({ hasErrors, isPristine, isInvalid }) {
-            // eslint-disable-next-line no-console
-            console.table({ hasErrors, isPristine, isInvalid });
-            return isPristine || isInvalid;
-          }
+          // setDoesFormHasErrors(hasErrors);
         }
       }
     );
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDoesFormHasErrors(true);
+    }, 3000);
   }, []);
 
   const LoginFormRendererEl = useMemo(() => {
@@ -56,7 +55,16 @@ const LoginForm = () => {
       >
         Login Form
       </h3>
-      <LoginFormRendererEl />
+      <LoginFormRendererEl
+        resolvers={{
+          isLoginDisabled({ hasErrors, isPristine, isInvalid }) {
+            // eslint-disable-next-line no-console
+            console.table({ hasErrors, isPristine, isInvalid });
+            return isPristine || isInvalid;
+          }
+        }}
+        // resolvers={r}
+      />
     </Holder>
   );
 };

@@ -1,5 +1,5 @@
 import { processValue } from "./shared";
-import { ComparisonOperators, CompoundOperators, BooleanConfig, OperationType } from "./types";
+import { ComparisonOperators, CompoundOperators, BooleanConfig, OperationType, State } from "./types";
 
 const atomicBooleanProcessor = (operator: ComparisonOperators, leftOperand: any, rightOperand: any): boolean => {
   switch (operator) {
@@ -27,7 +27,7 @@ const compoundBooleanProcessor = (operator: CompoundOperators, leftOperand: any,
   }
 };
 
-const booleanConfigProcessor = (booleanConfig: BooleanConfig, rootState, selfValue?: any): boolean => {
+const booleanConfigProcessor = (booleanConfig: BooleanConfig, rootState: State, selfValue?: any): boolean => {
   const { type: operationType } = booleanConfig;
   switch (operationType) {
     case OperationType.ATOMIC: {
@@ -43,7 +43,7 @@ const booleanConfigProcessor = (booleanConfig: BooleanConfig, rootState, selfVal
   }
 };
 
-export const booleanProcessor = (booleanClause: boolean | BooleanConfig, rootState, selfValue?: any) => {
+export const booleanProcessor = (booleanClause: boolean | BooleanConfig, rootState: State, selfValue?: any) => {
   if (typeof booleanClause === "boolean") {
     return booleanClause;
   }

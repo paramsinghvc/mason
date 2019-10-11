@@ -27,9 +27,7 @@ const TextField = ({ children, value, validations, ...props }: any) => {
           {Object.entries(validations.errors)
             .filter(([, value]) => Boolean(value))
             .map(([key, value]) => (
-              <p key={key}>
-                {value} - {key}
-              </p>
+              <p key={key}>{value}</p>
             ))}
         </ErrorsText>
       )}

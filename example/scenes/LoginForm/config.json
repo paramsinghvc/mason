@@ -21,7 +21,7 @@
           "type": "LENGTH",
           "meta": {
             "min": 3,
-            "max": 14
+            "max": 50
           }
         }
       ],

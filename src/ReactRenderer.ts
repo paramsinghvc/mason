@@ -9,7 +9,8 @@ import {
   ICustomHandlerConfig,
   State,
   Dispatch,
-  ActionType
+  ActionType,
+  IObject
 } from "./types";
 import { handleEvent } from "./eventHandling";
 import { validator } from "./validator";
@@ -99,14 +100,14 @@ const reducer = (state: State, { type, payload }) => {
   }
 };
 
+type FunctionsMap = {
+  [k: string]: (a: any) => any;
+};
+
 export type IRendererOptions = {
   initialValues?: Map<string, any>;
-  dataProcessors?: {
-    [k: string]: (a: any) => any;
-  };
-  resolvers?: {
-    [k: string]: (a: any) => any;
-  };
+  dataProcessors?: FunctionsMap;
+  resolvers?: FunctionsMap;
   onStateChange?: (state: State) => void;
   onErrorStateChange?: (hasErrors: boolean) => void;
 };
@@ -250,7 +251,7 @@ const evaluateDisabledClause = (
 };
 
 export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
-  private components: Map<string, React.Component> = new Map();
+  private componentsMap: Map<string, React.ExoticComponent> = new Map();
   readonly config: IConfig;
   private elementsMap: Map<string, React.ComponentType<any>>;
   public options: IRendererOptions;
@@ -275,83 +276,107 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     if (!elementComponent) {
       throw new Error(`No component exists for type ${type}`);
     }
-    const wrappedComponent: React.MemoExoticComponent<any> & { whyDidYouRender?: boolean } = memo(props => {
-      /** Getting the reducer context as a consumer for reading the state and dispatching actions */
-      const { state: rootState, dispatch } = useContext(context);
+    const wrappedComponent: React.NamedExoticComponent<{ style: IObject; resolvers: FunctionsMap; id: string }> = memo(
+      props => {
+        /** Getting the reducer context as a consumer for reading the state and dispatching actions */
+        const { state: rootState, dispatch } = useContext(context);
 
-      const rootDispatch = wrappedDispatch(dispatch, validations, { onStateChange });
-      this.currentRootStateSnapshot = rootState;
+        const rootDispatch = wrappedDispatch(dispatch, validations, { onStateChange });
+        this.currentRootStateSnapshot = rootState;
 
-      /** Creating the event handlers out of the events config */
-      const eventsMap = useMemo(() => {
-        return Object.entries(events).reduce((eventsObj, [eventName, eventConfig]) => {
-          const eventHandler = (event: Event, value?: any) => {
-            /** Executing multiple event handlers in case an array is provided against an event type in config */
-            if (Array.isArray(eventConfig)) {
-              eventConfig.forEach(config => {
-                handleEvent(config, { id, event, dataProcessors, value, resolvers }, rootDispatch, rootState);
-              });
-            } else {
-              handleEvent(eventConfig, { id, event, dataProcessors, value, resolvers }, rootDispatch, rootState);
-            }
-          };
-          eventsObj[eventName] = eventHandler;
-          return eventsObj;
-        }, {});
-      }, [events, rootState, rootDispatch]);
+        /** Creating the event handlers out of the events config */
+        const eventsMap = useMemo(() => {
+          return Object.entries(events).reduce((eventsObj, [eventName, eventConfig]) => {
+            const eventHandler = (event: Event, value?: any) => {
+              /** Executing multiple event handlers in case an array is provided against an event type in config */
+              if (Array.isArray(eventConfig)) {
+                eventConfig.forEach(config => {
+                  handleEvent(
+                    config,
+                    { id, event, dataProcessors, value, resolvers: props.resolvers },
+                    rootDispatch,
+                    rootState
+                  );
+                });
+              } else {
+                handleEvent(
+                  eventConfig,
+                  { id, event, dataProcessors, value, resolvers: props.resolvers },
+                  rootDispatch,
+                  rootState
+                );
+              }
+            };
+            eventsObj[eventName] = eventHandler;
+            return eventsObj;
+          }, {});
+        }, [events, rootState, rootDispatch]);
 
-      /** Storing the component and its props in the rootState on mounting */
-      useEffect(() => {
-        rootDispatch({
-          type: rootState[id] ? "UPDATE_ENTRY" : "ADD_ENTRY",
-          payload: {
-            id,
-            props: { ...meta, ...props, value: rootState[id] ? rootState[id].value : meta.value }
-          }
-        });
-        /** Checking if data key is provided in the config and setting the datasource on component Mount */
-        if (data) {
-          handleEvent(data, { id, dataProcessors, resolvers }, rootDispatch, rootState);
-        }
-      }, []);
-
-      const disabledEvaluated = evaluateDisabledClause(disabled, { rootState, resolvers, instance: this });
-
-      /** Constructing the original component by setting its props from the rootState and returning it */
-      const component = React.useMemo(
-        () =>
-          createElement(
-            elementComponent,
-            { ...(rootState[id] ? rootState[id] : { ...meta, ...props }), disabled: disabledEvaluated, ...eventsMap },
-            props.children
-          ),
-        [rootState[id], eventsMap, props.children]
-      );
-      const showCondition: boolean = show !== undefined ? booleanProcessor(show, rootState) : true;
-      useEffect(() => {
-        /**
-         * Check if the element has been hidden based on the show condition above and
-         * hence reset it's value into the rootState.
-         */
-        if (!showCondition && rootState[id] && typeof rootState[id].value !== "undefined") {
+        /** Storing the component and its props in the rootState on mounting */
+        useEffect(() => {
           rootDispatch({
-            type: "UPDATE_PROP",
+            type: rootState[id] ? "UPDATE_ENTRY" : "ADD_ENTRY",
             payload: {
               id,
-              prop: "value",
-              value: meta.value
+              props: { ...meta, ...props, value: rootState[id] ? rootState[id].value : meta.value }
             }
           });
-        }
-      }, [showCondition]);
+          /** Checking if data key is provided in the config and setting the datasource on component Mount */
+          if (data) {
+            handleEvent(data, { id, dataProcessors, resolvers: props.resolvers }, rootDispatch, rootState);
+          }
+        }, []);
 
-      return showCondition ? createElement("section", props, component) : null;
-    });
-    wrappedComponent.displayName = getWrapperComponentName(id);
+        const disabledEvaluated = evaluateDisabledClause(disabled, {
+          rootState,
+          resolvers: props.resolvers,
+          instance: this
+        });
+
+        /** Constructing the original component by setting its props from the rootState and returning it */
+        const component = React.useMemo(
+          () =>
+            createElement(
+              elementComponent,
+              { ...(rootState[id] ? rootState[id] : { ...meta, ...props }), disabled: disabledEvaluated, ...eventsMap },
+              props.children
+            ),
+          [rootState[id], eventsMap, props.children]
+        );
+        const showCondition: boolean = show !== undefined ? booleanProcessor(show, rootState) : true;
+        useEffect(() => {
+          /**
+           * Check if the element has been hidden based on the show condition above and
+           * hence reset it's value into the rootState.
+           */
+          if (!showCondition && rootState[id] && typeof rootState[id].value !== "undefined") {
+            rootDispatch({
+              type: "UPDATE_PROP",
+              payload: {
+                id,
+                prop: "value",
+                value: meta.value
+              }
+            });
+          }
+        }, [showCondition]);
+
+        return showCondition ? createElement("section", props, component) : null;
+      }
+    );
+    const displayName = getWrapperComponentName(id);
+    let component;
+    if (this.componentsMap.has(displayName)) {
+      component = this.componentsMap.get(displayName);
+    } else {
+      wrappedComponent.displayName = getWrapperComponentName(id);
+      this.componentsMap.set(displayName, wrappedComponent);
+      component = wrappedComponent;
+    }
     // wrappedComponent.whyDidYouRender = true;
     const el = createElement(
-      wrappedComponent,
-      { key: id, style, id },
+      component,
+      { key: id, style, id, resolvers },
       ...(children ? children.map(this.renderConfigNode) : [])
     );
     // this.components.set(id, el);
@@ -390,8 +415,11 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
   }
 
   render() {
-    return memo(() => {
+    return memo((props: { resolvers?: FunctionsMap }) => {
       const { config } = this.config;
+      if (props.resolvers) {
+        this.options.resolvers = props.resolvers;
+      }
       const initialState = this.constructInitialState(config, {});
       this.rootComponentRef = useRef();
       return createElement(
