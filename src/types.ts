@@ -143,3 +143,18 @@ export type ActionType = {
 };
 
 export type Dispatch = StateReturnableDispatch<ActionType>;
+
+export type FunctionsMap<T = any, U = any> = {
+  [k: string]: (a: T) => U;
+};
+
+export type ValidatorFunctionsMap = FunctionsMap<any, string | undefined | null>;
+
+export type IRendererOptions = {
+  initialValues?: Map<string, any>;
+  dataProcessors?: FunctionsMap;
+  resolvers?: FunctionsMap;
+  validators?: ValidatorFunctionsMap;
+  onStateChange?: (state: State) => void;
+  onErrorStateChange?: (hasErrors: boolean) => void;
+};

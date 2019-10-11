@@ -27,6 +27,11 @@ const LoginForm = () => {
       new Map([["PAGE_LAYOUT", TextField], ["TEXTFIELD", TextField], ["BUTTON", Button], ["BUTTON_PANEL", ButtonPanel]]),
       {
         initialValues: new Map([["email", "paramsinghvc@gmail.com"]]),
+        validators: {
+          myCustomEmailValidator(value: string) {
+            return !value.includes("swiggy") ? "Not a valid swiggy email" : undefined;
+          }
+        },
         onErrorStateChange(hasErrors: boolean) {
           // setDoesFormHasErrors(hasErrors);
         }

@@ -428,7 +428,154 @@ The root node has a little different structure than rest of the nodes. It has tw
     And, the **`onClick`** event is useful in case of a button component wherein you want to execute a custom event handler by matching it's name against what was passed in the `dataProcessors` property while creating the Renderer.
 
 
-8. <strong>`validations`</strong> can be used to configure the form validations on a given component. It's very useful in case of rendering forms. 
+8. <strong>`validations`</strong> can be used to configure the form validations on a given component. It's very useful in case of rendering forms. Here's a sample configuration for a simple Login Form.
+    ```json
+    {
+      "page": "FORM",
+      "config": [
+        {
+          "id": "email",
+          "type": "TEXTFIELD",
+          "meta": {
+            "placeholder": "Enter your email",
+            "type": "email",
+            "value": "",
+            "autoComplete": "off"
+          },
+          "validations": [
+            {
+              "type": "REQUIRED"
+            },
+            {
+              "type": "LENGTH",
+              "meta": {
+                "min": 3,
+                "max": 50
+              }
+            },
+            {
+              "type": "REGEX",
+              "meta": {
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"
+              }
+            }
+          ],
+          "events": {
+            "onChange": [
+              {
+                "type": "SET_VALUE"
+              }
+            ]
+          },
+          "style": {
+            "marginBottom": 10
+          }
+        },
+        {
+          "id": "password",
+          "type": "TEXTFIELD",
+          "meta": {
+            "value": "Password@123",
+            "type": "password",
+            "placeholder": "Enter your password"
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 10
+          },
+          "validations": [
+            {
+              "type": "REGEX",
+              "meta": {
+                "pattern": "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+              }
+            }
+          ]
+        }
+      ]
+    }
+    ```
+    The **`validations`** property expects an array of validation configuration to be supplied. Each configuration has a **`type`** field which can take either of the following values.
+    1. **`REQUIRED`** : It'll guard against any value which is a blank string `''`, `undefined` or `null` (and not blank array or objects).
+        ```json
+        {
+          "type": "REQUIRED"
+        }
+        ```
+    2. **`REGEX`** : You can specify a Regular Expression for pattern matching the current value of the component against it.
+       ```json
+        {
+          "type": "REGEX",
+          "meta": {
+            "pattern": "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+          }
+        }
+       ```
+    3. **`RANGE`** : To check if the value falls in the numeric range between `min` and `max` in `meta`.
+       ```json
+        {
+          "type": "RANGE",
+          "meta": {
+            "min": 3,
+            "max": 10
+          }
+        }
+       ```
+    4. **`LENGTH`** : Can work on both string and array values by checking `value.length` property between the `min` and `max` values specified in `meta`.
+       ```json
+        {
+          "type": "LENGTH",
+          "meta": {
+            "min": 3,
+            "max": 10
+          }
+        }
+       ```
+    5. **`JSON`** : To validate the JSON value fed to a component. It'll try to parse it and set a validation error if the parsing fails.
+       ```json
+        {
+          "type": "JSON"
+        }
+       ```
+    6. **`CUSTOM`** : In order to write a custom validator for custom needs.
+       ```json
+        {
+          "type": "CUSTOM",
+          "meta": {
+            "name": "myCustomValidator"
+          }
+        }
+       ```
+
+       The corresponding validator function has to be specified in the caller environment by passing a **`validators`** object containing these custom validator functions as
+       ```ts
+       validators: {
+          myCustomEmailValidator(value: string) {
+            return !value.includes("swiggy") ? "Not a valid swiggy email" : undefined;
+          }
+        }
+       ```
+       A validator function takes value as input and returns either a string in case of an invalid value or `undefined` otherwise. `undefined` means there was no error and the value was valid.
+
+9. **`disabled`** clause can be use to pass `disabled` property to the component. It can either take a boolean straight-forwardly or a Conditional config which has the following structure.
+    ```ts
+    type ConditionalConfig = {
+      type: OperationType;
+      operator: ComparisonOperators | CompoundOperators;
+      leftOperand: string | ConditionalConfig;
+      rightOperand: string | ConditionalConfig;
+    };
+    ```
+
+    The **`OperationType`** can be
+      * **`ATOMIC`**: It's like a one level condition. A single expression like `x === true`
+      * **`COMPOUND`**: Compound condition can have multiple expressions joined via Compound operators like **`&&`** or **`||`**
+    
+    The **`operators`** could be either **compound** operators as mentioned above or comparison operators like **`=`, `!=`, `<`, `<=`, `>`, `>=`**
 
 <!-- CONTRIBUTING -->
 

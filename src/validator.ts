@@ -1,6 +1,10 @@
-import { IValidationConfig, ValidationTypes } from "./types";
+import { IValidationConfig, ValidationTypes, ValidatorFunctionsMap } from "./types";
 
-export const validator = (validations: Array<IValidationConfig> = [], value: any) =>
+export const validator = (
+  validations: Array<IValidationConfig> = [],
+  value: any,
+  options?: { validators: ValidatorFunctionsMap }
+) =>
   validations.reduce((errors: { [k in ValidationTypes]?: string }, validation: IValidationConfig) => {
     switch (validation.type) {
       case ValidationTypes.REQUIRED:
@@ -12,7 +16,7 @@ export const validator = (validations: Array<IValidationConfig> = [], value: any
           }
         }
         break;
-      case "REGEX":
+      case ValidationTypes.REGEX:
         {
           const {
             meta: { pattern }
@@ -24,7 +28,7 @@ export const validator = (validations: Array<IValidationConfig> = [], value: any
           }
         }
         break;
-      case "LENGTH":
+      case ValidationTypes.LENGTH:
         {
           const {
             meta: { min, max }
@@ -38,7 +42,7 @@ export const validator = (validations: Array<IValidationConfig> = [], value: any
           }
         }
         break;
-      case "RANGE":
+      case ValidationTypes.RANGE:
         {
           const {
             meta: { min, max }
@@ -47,6 +51,30 @@ export const validator = (validations: Array<IValidationConfig> = [], value: any
             errors[ValidationTypes.RANGE] = `The value should be in the range of ${min} and ${max}`;
           } else {
             errors[ValidationTypes.RANGE] = "";
+          }
+        }
+        break;
+      case ValidationTypes.JSON:
+        {
+          try {
+            JSON.parse(value);
+            errors[ValidationTypes.JSON] = "";
+          } catch (err) {
+            errors[ValidationTypes.JSON] = `Invalid JSON supplied`;
+          }
+        }
+        break;
+
+      case ValidationTypes.CUSTOM:
+        {
+          const {
+            meta: { name }
+          } = validation;
+          if (options && options.validators && options.validators[name]) {
+            const isInvalid = options.validators[name](value);
+            errors[ValidationTypes.CUSTOM] = isInvalid ? isInvalid : "";
+          } else {
+            console.error("No custom validator function specified");
           }
         }
         break;

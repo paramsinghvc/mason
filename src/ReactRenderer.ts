@@ -10,7 +10,10 @@ import {
   State,
   Dispatch,
   ActionType,
-  IObject
+  IObject,
+  IRendererOptions,
+  FunctionsMap,
+  ValidatorFunctionsMap
 } from "./types";
 import { handleEvent } from "./eventHandling";
 import { validator } from "./validator";
@@ -100,18 +103,6 @@ const reducer = (state: State, { type, payload }) => {
   }
 };
 
-type FunctionsMap = {
-  [k: string]: (a: any) => any;
-};
-
-export type IRendererOptions = {
-  initialValues?: Map<string, any>;
-  dataProcessors?: FunctionsMap;
-  resolvers?: FunctionsMap;
-  onStateChange?: (state: State) => void;
-  onErrorStateChange?: (hasErrors: boolean) => void;
-};
-
 type IRendererContext = {
   state: State;
   dispatch: Dispatch;
@@ -122,12 +113,15 @@ const context = createContext<IRendererContext>(null as any);
 const wrappedDispatch = (
   dispatch: Dispatch,
   validations: Array<IValidationConfig> = [],
-  options?: { onStateChange?: IRendererOptions["onStateChange"] }
+  options?: {
+    onStateChange?: IRendererOptions["onStateChange"];
+    validators?: ValidatorFunctionsMap;
+  }
 ) => ({ type, payload }) => {
   const isValuedBeingUpdated = type === "UPDATE_PROP" && payload.prop === "value";
   if (isValuedBeingUpdated) {
     const { value, id: fieldId } = payload;
-    const validationErrors = validator(validations, value);
+    const validationErrors = validator(validations, value, { validators: options && options.validators });
     const hasErrors = Object.values(validationErrors).some(Boolean);
     dispatch({
       type: "UPDATE_PROP",
@@ -167,20 +161,27 @@ function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state
   return state;
 }
 
-function determineValidationStatus(config: IConfigNode | IConfigNode[], state: State, isValid: boolean) {
+function determineValidationStatus(
+  config: IConfigNode | IConfigNode[],
+  state: State,
+  isValid: boolean,
+  options?: { validators?: ValidatorFunctionsMap }
+) {
   if (Array.isArray(config)) {
     return config.reduce(
-      (acc: boolean, configNode: IConfigNode) => acc && determineValidationStatus(configNode, state, isValid),
+      (acc: boolean, configNode: IConfigNode) => acc && determineValidationStatus(configNode, state, isValid, options),
       isValid
     );
   }
   if (config.validations) {
-    const validationErrors = validator(config.validations, state[config.id].value);
+    const validationErrors = validator(config.validations, state[config.id].value, {
+      validators: options && options.validators
+    });
     const hasErrors = Object.values(validationErrors).some(Boolean);
     if (hasErrors) return false;
   }
   if (config.children) {
-    return determineValidationStatus(config.children, state, isValid);
+    return determineValidationStatus(config.children, state, isValid, options);
   }
   return true;
 }
@@ -213,7 +214,9 @@ const RootComponentCore = forwardRef<any, { initialState: State; instance: React
 
     /** A silent flag to check the validation status of the whole form in general by executing validators of
      * each config node against its corresponding value in the state. */
-    instance.isInvalid = !determineValidationStatus(instance.config.config, state, true);
+    instance.isInvalid = !determineValidationStatus(instance.config.config, state, true, {
+      validators: instance.options.validators
+    });
 
     const props = {
       value: {
@@ -270,7 +273,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
   }
   renderConfigNode(node: IConfigNode) {
     const { id, type, meta = {}, data, events = {}, validations, children, style, show, disabled } = node;
-    const { dataProcessors = {}, onStateChange, resolvers } = this.options;
+    const { dataProcessors = {}, onStateChange, resolvers, validators } = this.options;
 
     const elementComponent = this.elementsMap.get(type);
     if (!elementComponent) {
@@ -281,7 +284,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
         /** Getting the reducer context as a consumer for reading the state and dispatching actions */
         const { state: rootState, dispatch } = useContext(context);
 
-        const rootDispatch = wrappedDispatch(dispatch, validations, { onStateChange });
+        const rootDispatch = wrappedDispatch(dispatch, validations, { onStateChange, validators });
         this.currentRootStateSnapshot = rootState;
 
         /** Creating the event handlers out of the events config */
@@ -334,7 +337,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
         });
 
         /** Constructing the original component by setting its props from the rootState and returning it */
-        const component = React.useMemo(
+        const component = useMemo(
           () =>
             createElement(
               elementComponent,
