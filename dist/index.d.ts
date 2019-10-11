@@ -1,30 +1,10 @@
 
-export declare type ActionType = {
-    type: string;
-    payload: any;
-};
-export declare type IRendererOptions = {
-    initialValues?: Map<string, any>;
-    dataProcessors?: {
-        [k: string]: (a: any) => any;
-    };
-    resolvers?: {
-        [k: string]: (a: any) => any;
-    };
-    onStateChange?: (state: {
-        [k: string]: any;
-    }) => void;
-    onErrorStateChange?: (hasErrors: boolean) => void;
-};
 export declare const RootComponent: React.MemoExoticComponent<React.ForwardRefExoticComponent<{
-    initialState: IObject;
+    initialState: State;
     instance: ReactConfigRenderer;
 } & React.RefAttributes<any>>>;
-declare type IObject = {
-    [k: string]: any;
-};
 export declare class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
-    private components;
+    private componentsMap;
     readonly config: IConfig;
     private elementsMap;
     options: IRendererOptions;
@@ -35,18 +15,20 @@ export declare class ReactConfigRenderer implements IConfigRenderer<React.ReactN
     isInvalid: boolean;
     constructor(config: IConfig, elementsMap: Map<string, React.ComponentType<any>>, options?: IRendererOptions);
     renderConfigNode(node: IConfigNode): any;
-    checkIfValuesPristine(rootState: IObject): any;
-    constructInitialState(config: IConfigNode | Array<IConfigNode>, initialState: any): any;
-    getValuesFromState(state: IObject): {};
+    checkIfValuesPristine(rootState: State): boolean;
+    constructInitialState(config: IConfigNode | Array<IConfigNode>, initialState: any): State;
+    getValuesFromState(state: State): {};
     getCurrentValuesSnapshot(): {};
     setValue(val: any): void;
-    render(): React.MemoExoticComponent<() => React.FunctionComponentElement<{
-        initialState: IObject;
+    render(): React.MemoExoticComponent<(props: {
+        resolvers?: FunctionsMap<any, any>;
+    }) => React.FunctionComponentElement<{
+        initialState: State;
         instance: ReactConfigRenderer;
     } & React.RefAttributes<any>>>;
 }
 
-export declare const booleanProcessor: (booleanClause: boolean | import("./types").ConditionalConfig, rootState: any, selfValue?: any) => boolean;
+export declare const booleanProcessor: (booleanClause: boolean | import("./types").ConditionalConfig, rootState: State, selfValue?: any) => boolean;
 
 interface IOptions {
     id: string;
@@ -55,7 +37,7 @@ interface IOptions {
     dataProcessors: {};
     resolvers: {};
 }
-export declare const handleEvent: (eventConfig: IEventsConfig, { id, event, dataProcessors, value, resolvers }: IOptions, rootDispatch: any, rootState: any) => void;
+export declare const handleEvent: (eventConfig: IEventsConfig, { id, event, dataProcessors, value, resolvers }: IOptions, rootDispatch: import("./types").StateReturnableDispatch<import("./types").ActionType>, rootState: State) => void;
 
 export * from "./ReactRenderer";
 
@@ -169,8 +151,42 @@ export interface IConfigRenderer<ReturnNodeType = any> {
     readonly config: IConfig;
     render: () => ReturnNodeType;
 }
+export declare type IObject = {
+    [k: string]: any;
+};
+export declare type State = {
+    [id: string]: {
+        value: any;
+        initialValue: any;
+        validations?: {
+            hasErrors: boolean;
+            errors: IObject;
+        };
+        [key: string]: any;
+    };
+};
+export declare type StateReturnableDispatch<A> = (value: A) => State;
+export declare type ActionType = {
+    type: string;
+    payload: any;
+};
+export declare type Dispatch = StateReturnableDispatch<ActionType>;
+export declare type FunctionsMap<T = any, U = any> = {
+    [k: string]: (a: T) => U;
+};
+export declare type ValidatorFunctionsMap = FunctionsMap<any, string | undefined | null>;
+export declare type IRendererOptions = {
+    initialValues?: Map<string, any>;
+    dataProcessors?: FunctionsMap;
+    resolvers?: FunctionsMap;
+    validators?: ValidatorFunctionsMap;
+    onStateChange?: (state: State) => void;
+    onErrorStateChange?: (hasErrors: boolean) => void;
+};
 
-export declare const validator: (validations: IValidationConfig[], value: any) => {
+export declare const validator: (validations: IValidationConfig[], value: any, options?: {
+    validators: import("./types").FunctionsMap<any, string>;
+}) => {
     REQUIRED?: string;
     REGEX?: string;
     CUSTOM?: string;

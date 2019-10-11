@@ -457,7 +457,146 @@ ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code>
 					</li>
 				</ol>
 				<ol start="8">
-					<li><strong><code>validations</code></strong> can be used to configure the form validations on a given component. It&#39;s very useful in case of rendering forms. </li>
+					<li><p><strong><code>validations</code></strong> can be used to configure the form validations on a given component. It&#39;s very useful in case of rendering forms. Here&#39;s a sample configuration for a simple Login Form.</p>
+						<pre><code class="language-json"> {
+   <span class="hljs-attr">"page"</span>: <span class="hljs-string">"FORM"</span>,
+   <span class="hljs-attr">"config"</span>: [
+     {
+       <span class="hljs-attr">"id"</span>: <span class="hljs-string">"email"</span>,
+       <span class="hljs-attr">"type"</span>: <span class="hljs-string">"TEXTFIELD"</span>,
+       <span class="hljs-attr">"meta"</span>: {
+         <span class="hljs-attr">"placeholder"</span>: <span class="hljs-string">"Enter your email"</span>,
+         <span class="hljs-attr">"type"</span>: <span class="hljs-string">"email"</span>,
+         <span class="hljs-attr">"value"</span>: <span class="hljs-string">""</span>,
+         <span class="hljs-attr">"autoComplete"</span>: <span class="hljs-string">"off"</span>
+       },
+       <span class="hljs-attr">"validations"</span>: [
+         {
+           <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REQUIRED"</span>
+         },
+         {
+           <span class="hljs-attr">"type"</span>: <span class="hljs-string">"LENGTH"</span>,
+           <span class="hljs-attr">"meta"</span>: {
+             <span class="hljs-attr">"min"</span>: <span class="hljs-number">3</span>,
+             <span class="hljs-attr">"max"</span>: <span class="hljs-number">50</span>
+           }
+         },
+         {
+           <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REGEX"</span>,
+           <span class="hljs-attr">"meta"</span>: {
+             <span class="hljs-attr">"pattern"</span>: <span class="hljs-string">"^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$"</span>
+           }
+         }
+       ],
+       <span class="hljs-attr">"events"</span>: {
+         <span class="hljs-attr">"onChange"</span>: [
+           {
+             <span class="hljs-attr">"type"</span>: <span class="hljs-string">"SET_VALUE"</span>
+           }
+         ]
+       },
+       <span class="hljs-attr">"style"</span>: {
+         <span class="hljs-attr">"marginBottom"</span>: <span class="hljs-number">10</span>
+       }
+     },
+     {
+       <span class="hljs-attr">"id"</span>: <span class="hljs-string">"password"</span>,
+       <span class="hljs-attr">"type"</span>: <span class="hljs-string">"TEXTFIELD"</span>,
+       <span class="hljs-attr">"meta"</span>: {
+         <span class="hljs-attr">"value"</span>: <span class="hljs-string">"Password@123"</span>,
+         <span class="hljs-attr">"type"</span>: <span class="hljs-string">"password"</span>,
+         <span class="hljs-attr">"placeholder"</span>: <span class="hljs-string">"Enter your password"</span>
+       },
+       <span class="hljs-attr">"events"</span>: {
+         <span class="hljs-attr">"onChange"</span>: {
+           <span class="hljs-attr">"type"</span>: <span class="hljs-string">"SET_VALUE"</span>
+         }
+       },
+       <span class="hljs-attr">"style"</span>: {
+         <span class="hljs-attr">"marginBottom"</span>: <span class="hljs-number">10</span>
+       },
+       <span class="hljs-attr">"validations"</span>: [
+         {
+           <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REGEX"</span>,
+           <span class="hljs-attr">"meta"</span>: {
+             <span class="hljs-attr">"pattern"</span>: <span class="hljs-string">"^(?=.*\\d)(?=.*[!@#$%^&amp;*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"</span>
+           }
+         }
+       ]
+     }
+   ]
+ }</code></pre>
+						<p> The <strong><code>validations</code></strong> property expects an array of validation configuration to be supplied. Each configuration has a <strong><code>type</code></strong> field which can take either of the following values.</p>
+						<ol>
+							<li><p><strong><code>REQUIRED</code></strong> : It&#39;ll guard against any value which is a blank string <code>&#39;&#39;</code>, <code>undefined</code> or <code>null</code> (and not blank array or objects).</p>
+								<pre><code class="language-json"> {
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REQUIRED"</span>
+ }</code></pre>
+							</li>
+							<li><p><strong><code>REGEX</code></strong> : You can specify a Regular Expression for pattern matching the current value of the component against it.</p>
+								<pre><code class="language-json"> {
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"REGEX"</span>,
+   <span class="hljs-attr">"meta"</span>: {
+     <span class="hljs-attr">"pattern"</span>: <span class="hljs-string">"^(?=.*\\d)(?=.*[!@#$%^&amp;*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"</span>
+   }
+ }</code></pre>
+							</li>
+							<li><p><strong><code>RANGE</code></strong> : To check if the value falls in the numeric range between <code>min</code> and <code>max</code> in <code>meta</code>.</p>
+								<pre><code class="language-json"> {
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"RANGE"</span>,
+   <span class="hljs-attr">"meta"</span>: {
+     <span class="hljs-attr">"min"</span>: <span class="hljs-number">3</span>,
+     <span class="hljs-attr">"max"</span>: <span class="hljs-number">10</span>
+   }
+ }</code></pre>
+							</li>
+							<li><p><strong><code>LENGTH</code></strong> : Can work on both string and array values by checking <code>value.length</code> property between the <code>min</code> and <code>max</code> values specified in <code>meta</code>.</p>
+								<pre><code class="language-json"> {
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"LENGTH"</span>,
+   <span class="hljs-attr">"meta"</span>: {
+     <span class="hljs-attr">"min"</span>: <span class="hljs-number">3</span>,
+     <span class="hljs-attr">"max"</span>: <span class="hljs-number">10</span>
+   }
+ }</code></pre>
+							</li>
+							<li><p><strong><code>JSON</code></strong> : To validate the JSON value fed to a component. It&#39;ll try to parse it and set a validation error if the parsing fails.</p>
+								<pre><code class="language-json"> {
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"JSON"</span>
+ }</code></pre>
+							</li>
+							<li><p><strong><code>CUSTOM</code></strong> : In order to write a custom validator for custom needs.</p>
+								<pre><code class="language-json"> {
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"CUSTOM"</span>,
+   <span class="hljs-attr">"meta"</span>: {
+     <span class="hljs-attr">"name"</span>: <span class="hljs-string">"myCustomValidator"</span>
+   }
+ }</code></pre>
+								<p>The corresponding validator function has to be specified in the caller environment by passing a <strong><code>validators</code></strong> object containing these custom validator functions as</p>
+								<pre><code class="language-ts">validators: {
+   myCustomEmailValidator(value: <span class="hljs-built_in">string</span>) {
+     <span class="hljs-keyword">return</span> !value.includes(<span class="hljs-string">"swiggy"</span>) ? <span class="hljs-string">"Not a valid swiggy email"</span> : <span class="hljs-literal">undefined</span>;
+   }
+ }</code></pre>
+								<p>A validator function takes value as input and returns either a string in case of an invalid value or <code>undefined</code> otherwise. <code>undefined</code> means there was no error and the value was valid.</p>
+							</li>
+						</ol>
+					</li>
+					<li><p><strong><code>disabled</code></strong> clause can be use to pass <code>disabled</code> property to the component. It can either take a boolean straight-forwardly or a Conditional config which has the following structure.</p>
+						<pre><code class="language-ts"> <span class="hljs-keyword">type</span> ConditionalConfig = {
+   <span class="hljs-keyword">type</span>: OperationType;
+   operator: ComparisonOperators | CompoundOperators;
+   leftOperand: <span class="hljs-built_in">string</span> | ConditionalConfig;
+   rightOperand: <span class="hljs-built_in">string</span> | ConditionalConfig;
+ };</code></pre>
+						<p> The <strong><code>OperationType</code></strong> can be</p>
+						<ul>
+							<li><p><strong><code>ATOMIC</code></strong>: It&#39;s like a one level condition. A single expression like <code>x === true</code></p>
+							</li>
+							<li><p><strong><code>COMPOUND</code></strong>: Compound condition can have multiple expressions joined via Compound operators like <strong><code>&amp;&amp;</code></strong> or <strong><code>||</code></strong></p>
+								<p>The <strong><code>operators</code></strong> could be either <strong>compound</strong> operators as mentioned above or comparison operators like <strong><code>=</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code></strong></p>
+							</li>
+						</ul>
+					</li>
 				</ol>
 				<!-- CONTRIBUTING -->
 				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
