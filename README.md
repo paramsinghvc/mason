@@ -13,7 +13,7 @@
     <img src="https://user-images.githubusercontent.com/4329912/59576593-06a31000-90de-11e9-9187-2abbd4009ba4.png" alt="Logo" width="80" height="80">
   </a>
 
-  <p style="text-align: center; font-size: 36px; font-weight: 600">Mason</p>
+  <h1 align="center">Mason</h1>
 
   <p align="center">
     Building dynamic, eventful, cohesive config driven UI easily
@@ -21,7 +21,7 @@
     <a href="https://www.npmjs.com/package/@mollycule/mason"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <p style="text-align: center; font-size: 18px; font-weight: 600">Example Screenshot</p>
+    <h4 align="center">Example Screenshot</h4>
     <p align="center">
     <img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" width="500" />
     </p>
