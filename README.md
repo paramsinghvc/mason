@@ -34,6 +34,8 @@
     <a href="https://github.com/paramsinghvc/mason/issues">Request Feature</a>
     .
     <a href="https://www.npmjs.com/package/@mollycule/mason">NPM Link</a>
+    .
+    <a href="https://slides.com/paramsingh/building-config-driven-ui-platforms">Slides</a>
   </p>
 </p>
 <br/>
@@ -197,7 +199,8 @@ const homePageRenderer = new ReactConfigRenderer(
   }
 );
 
-const App = () => <main>{homePageRenderer.render()}</main>;
+const HomePage = homePageRenderer.render();
+const App = () => <main><HomePage /></main>;
 
 ReactDOM.render(<App/>, document.getElementById("root"));
 ```
@@ -223,7 +226,8 @@ Below is the detailed configuration options that can be done using Mason.
   }
 ```
 
-The root node has a little different structure than rest of the nodes. It has two properties as `page` and `config` which basically represents the page or route of your web app you're trying to configure the UI for. That said, mason is not limited to page levels only. You can use it to created nested UI as well.
+The root node has a little different structure than rest of the nodes. It has two properties as **`page`** and **`config`** which basically represents the page or route of your web app you're trying to configure the UI for. That said, mason is not limited to page levels only. You can use it to created nested UI as well.
+Note: The **`config`** property can be an array of nodes as well striaght-away if you don't want to wrap them in an uber level layout element.
 
 #### 2. Component Node
 
@@ -267,12 +271,12 @@ The root node has a little different structure than rest of the nodes. It has tw
 
 4. <strong>`show`</strong> property will completely unmount or not render the component in the first place if it evaluated to falsy. It can accept either a boolean or a boolean confguration as
     ```json
-      {
-        "operator": "!=",
-        "leftOperand": "<%statesDropdown%>",
-        "rightOperand": "[]",
-        "type": "ATOMIC"
-      }
+    {
+      "operator": "!=",
+      "leftOperand": "<%statesDropdown%>",
+      "rightOperand": "[]",
+      "type": "ATOMIC"
+    }
     ```
 
     Here, it'll evaluate the boolean operation as `<Value of statesDropdown> != []` and determine the value of `show`.
@@ -358,7 +362,7 @@ The root node has a little different structure than rest of the nodes. It has tw
         }
       }
       ``` 
-      The Custom function needs to be passed in the `dataProcessors` map while creating the renderer. It'll be called with one parameter as `({ event, value, id })` from which the values can be destructured during invocation.
+      The Custom function needs to be passed in the `resolvers` map while creating the renderer. It'll be called with one parameter as `({ event, value, id })` from which the values can be destructured during invocation.
 
 6. <strong>`events`</strong> property can either accept a map of event name vs their handlers configuration. Each event could have multiple handlers, hence both the array config and object config is supported. Below is the TypeScript typing for the same.
     ```ts
@@ -618,3 +622,6 @@ Project Link: [https://github.com/paramsinghvc/mason](https://github.com/paramsi
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=0077B5
 [linkedin-url]: https://www.linkedin.com/in/paramsinghvc
 [product-screenshot]: https://user-images.githubusercontent.com/4329912/59576904-0d7e5280-90df-11e9-868d-dec257ed1626.png
+
+
+<p align="center"> Made with ❤️ in Bangalore, India </p>
