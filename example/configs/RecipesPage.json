@@ -45,7 +45,7 @@
           {
             "type": "CUSTOM",
             "meta": {
-              "functionName": "validateSearch"
+              "name": "validateSearch"
             }
           },
           {

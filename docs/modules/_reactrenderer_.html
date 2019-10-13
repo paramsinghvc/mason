@@ -120,7 +120,7 @@
 					<div class="tsd-signature tsd-kind-icon">IRenderer<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L106">ReactRenderer.ts:106</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L106">ReactRenderer.ts:106</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -144,7 +144,7 @@
 					<div class="tsd-signature tsd-kind-icon">Root<wbr>Component<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NamedExoticComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">RefAttributes</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;memo(RootComponentCore)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L234">ReactRenderer.ts:234</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L234">ReactRenderer.ts:234</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -154,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">Root<wbr>Component<wbr>Core<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ForwardRefExoticComponent</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">RefAttributes</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;forwardRef&lt;any, { initialState: State; instance: ReactConfigRenderer }&gt;(({ children, initialState &#x3D; {}, instance }, ref) &#x3D;&gt; {const [state, dispatch] &#x3D; useReducer(reducer, initialState);useImperativeHandle(ref,() &#x3D;&gt; ({setRootState(config: IConfigNode, val) {const newState &#x3D; constructStateFromValue(config, { ...state }, val);dispatch({ type: &quot;REPLACE_STATE_VALUES&quot;, payload: newState });}}),[state]);/* Check if any of the current state value hasErrors. And set the root Renderer instance value accordingly */const hasErrors &#x3D; Object.values(state).some(({ validations }) &#x3D;&gt; validations &amp;&amp; validations.hasErrors);if (instance.hasErrors !&#x3D;&#x3D; hasErrors) {const { onErrorStateChange } &#x3D; instance.options;onErrorStateChange &amp;&amp; onErrorStateChange(hasErrors);instance.hasErrors &#x3D; hasErrors;}/* Check if any of the current state value have been changed and set the pristine flag on the Renderer instance */instance.isPristine &#x3D; instance.checkIfValuesPristine(state);/** A silent flag to check the validation status of the whole form in general by executing validators of* each config node against its corresponding value in the state. */instance.isInvalid &#x3D; !determineValidationStatus(instance.config.config, state, true, {validators: instance.options.validators});const props &#x3D; {value: {state,dispatch: (action: ActionType) &#x3D;&gt; {dispatch(action);return state;}}};return createElement(context.Provider, props, children);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L189">ReactRenderer.ts:189</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L189">ReactRenderer.ts:189</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -164,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Context</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;createContext&lt;IRendererContext&gt;(null as any)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L111">ReactRenderer.ts:111</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L111">ReactRenderer.ts:111</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -174,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">create<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">createContext</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L26">ReactRenderer.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L26">ReactRenderer.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -184,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">create<wbr>Element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">createElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L29">ReactRenderer.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L29">ReactRenderer.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -194,7 +194,7 @@
 					<div class="tsd-signature tsd-kind-icon">forward<wbr>Ref<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">forwardRef</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L33">ReactRenderer.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L33">ReactRenderer.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -204,7 +204,7 @@
 					<div class="tsd-signature tsd-kind-icon">memo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">memo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L27">ReactRenderer.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L27">ReactRenderer.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -214,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">useContext</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L30">ReactRenderer.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L30">ReactRenderer.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -224,7 +224,7 @@
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Effect<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">useEffect</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L31">ReactRenderer.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L31">ReactRenderer.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -234,7 +234,7 @@
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Imperative<wbr>Handle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">useImperativeHandle</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L35">ReactRenderer.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L35">ReactRenderer.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -244,7 +244,7 @@
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Memo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">useMemo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L32">ReactRenderer.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L32">ReactRenderer.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -254,7 +254,7 @@
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Reducer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">useReducer</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L28">ReactRenderer.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L28">ReactRenderer.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -264,7 +264,7 @@
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Ref<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">useRef</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L34">ReactRenderer.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L34">ReactRenderer.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -281,7 +281,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L142">ReactRenderer.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L142">ReactRenderer.ts:142</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -337,7 +337,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L164">ReactRenderer.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L164">ReactRenderer.ts:164</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -374,7 +374,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L238">ReactRenderer.ts:238</a></li>
+									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L238">ReactRenderer.ts:238</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -411,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L38">ReactRenderer.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L38">ReactRenderer.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -434,7 +434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L68">ReactRenderer.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L68">ReactRenderer.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -495,7 +495,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/28dd7e1/src/ReactRenderer.ts#L113">ReactRenderer.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/paramsinghvc/mason/blob/55a99fa/src/ReactRenderer.ts#L113">ReactRenderer.ts:113</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>

@@ -74,14 +74,14 @@
 					<a href="https://github.com/paramsinghvc/mason">
 						<img src="https://user-images.githubusercontent.com/4329912/59576593-06a31000-90de-11e9-9187-2abbd4009ba4.png" alt="Logo" width="80" height="80">
 					</a>
-					<p style="text-align: center; font-size: 36px; font-weight: 600">Mason</p>
+					<h1 align="center">Mason</h1>
 					<p align="center">
 						Building dynamic, eventful, cohesive config driven UI easily
 						<br />
 						<a href="https://www.npmjs.com/package/@mollycule/mason"><strong>Explore the docs »</strong></a>
 						<br />
 						<br />
-						<p style="text-align: center; font-size: 18px; font-weight: 600">Example Screenshot</p>
+						<h4 align="center">Example Screenshot</h4>
 						<p align="center">
 							<img alt="Rendered UI Screenshot" src="https://user-images.githubusercontent.com/4329912/64925694-43cc8a80-d812-11e9-879d-0d27ceee6e4e.png" width="500" />
 						</p>
@@ -94,6 +94,8 @@
 						<a href="https://github.com/paramsinghvc/mason/issues">Request Feature</a>
 						.
 						<a href="https://www.npmjs.com/package/@mollycule/mason">NPM Link</a>
+						.
+						<a href="https://slides.com/paramsingh/building-config-driven-ui-platforms">Slides</a>
 					</p>
 				</p>
 				<br/>
@@ -254,7 +256,8 @@ const homePageRenderer = new ReactConfigRenderer(
   }
 );
 
-const App = () =&gt; &lt;main&gt;{homePageRenderer.render()}&lt;/main&gt;;
+const HomePage = homePageRenderer.render();
+const App = () =&gt; &lt;main&gt;&lt;HomePage /&gt;&lt;/main&gt;;
 
 ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code></pre>
 				<!-- CONFIGURATION -->
@@ -275,7 +278,8 @@ ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code>
     },
     <span class="hljs-attr">"children"</span>: [...]
   }</code></pre>
-				<p>The root node has a little different structure than rest of the nodes. It has two properties as <code>page</code> and <code>config</code> which basically represents the page or route of your web app you&#39;re trying to configure the UI for. That said, mason is not limited to page levels only. You can use it to created nested UI as well.</p>
+				<p>The root node has a little different structure than rest of the nodes. It has two properties as <strong><code>page</code></strong> and <strong><code>config</code></strong> which basically represents the page or route of your web app you&#39;re trying to configure the UI for. That said, mason is not limited to page levels only. You can use it to created nested UI as well.
+				Note: The <strong><code>config</code></strong> property can be an array of nodes as well striaght-away if you don&#39;t want to wrap them in an uber level layout element.</p>
 				<a href="#2-component-node" id="2-component-node" style="color: inherit; text-decoration: none;">
 					<h4>2. Component Node</h4>
 				</a>
@@ -314,12 +318,12 @@ ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code>
 						<i>Note: Setting up <code>value</code> property in <code>meta</code> is helpful when you want to make your component controllable to avoid React warnings</i></p>
 					</li>
 					<li><p><strong><code>show</code></strong> property will completely unmount or not render the component in the first place if it evaluated to falsy. It can accept either a boolean or a boolean confguration as</p>
-						<pre><code class="language-json">   {
-     <span class="hljs-attr">"operator"</span>: <span class="hljs-string">"!="</span>,
-     <span class="hljs-attr">"leftOperand"</span>: <span class="hljs-string">"&lt;%statesDropdown%&gt;"</span>,
-     <span class="hljs-attr">"rightOperand"</span>: <span class="hljs-string">"[]"</span>,
-     <span class="hljs-attr">"type"</span>: <span class="hljs-string">"ATOMIC"</span>
-   }</code></pre>
+						<pre><code class="language-json"> {
+   <span class="hljs-attr">"operator"</span>: <span class="hljs-string">"!="</span>,
+   <span class="hljs-attr">"leftOperand"</span>: <span class="hljs-string">"&lt;%statesDropdown%&gt;"</span>,
+   <span class="hljs-attr">"rightOperand"</span>: <span class="hljs-string">"[]"</span>,
+   <span class="hljs-attr">"type"</span>: <span class="hljs-string">"ATOMIC"</span>
+ }</code></pre>
 						<p> Here, it&#39;ll evaluate the boolean operation as <code>&lt;Value of statesDropdown&gt; != []</code> and determine the value of <code>show</code>.</p>
 						<br/>
 						<p> The detailed sturcture of <code>BooleanConfig</code> can be understood as the TS type below:</p>
@@ -396,7 +400,7 @@ ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code>
     }
   }
   ``` 
-  The Custom <span class="hljs-keyword">function</span> needs <span class="hljs-keyword">to</span> be passed <span class="hljs-keyword">in</span> the `dataProcessors` map <span class="hljs-keyword">while</span> creating the renderer. It<span class="hljs-string">'ll be called with one parameter as `({ event, value, id })` from which the values can be destructured during invocation.</span></code></pre><ol start="6">
+  The Custom <span class="hljs-keyword">function</span> needs <span class="hljs-keyword">to</span> be passed <span class="hljs-keyword">in</span> the `resolvers` map <span class="hljs-keyword">while</span> creating the renderer. It<span class="hljs-string">'ll be called with one parameter as `({ event, value, id })` from which the values can be destructured during invocation.</span></code></pre><ol start="6">
 					<li><p><strong><code>events</code></strong> property can either accept a map of event name vs their handlers configuration. Each event could have multiple handlers, hence both the array config and object config is supported. Below is the TypeScript typing for the same.</p>
 						<pre><code class="language-ts"> events?: {
    [eventName: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">Array</span>&lt;IEventsConfig&gt; | IEventsConfig;
@@ -629,6 +633,7 @@ ReactDOM.render(&lt;App/&gt;, document.getElementById(&quot;root&quot;));</code>
 					<li><a href="https://shields.io">Img Shields</a></li>
 				</ul>
 				<!-- MARKDOWN LINKS & IMAGES -->
+				<p align="center"> Made with ❤️ in Bangalore, India </p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">

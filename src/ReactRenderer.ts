@@ -364,7 +364,9 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
           }
         }, [showCondition]);
 
-        return showCondition ? createElement("section", props, component) : null;
+        const sectionProps = { ...props };
+        delete sectionProps.resolvers;
+        return showCondition ? createElement("section", sectionProps, component) : null;
       }
     );
     const displayName = getWrapperComponentName(id);
