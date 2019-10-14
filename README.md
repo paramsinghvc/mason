@@ -13,7 +13,7 @@
     <img src="https://user-images.githubusercontent.com/4329912/59576593-06a31000-90de-11e9-9187-2abbd4009ba4.png" alt="Logo" width="80" height="80">
   </a>
 
-  <p align="center"><h1 align="center">Mason</h1></p>
+  <p align="center"><h2 align="center">Mason</h2></p>
 
   <p align="center">
     Building dynamic, eventful, cohesive config driven UI easily
