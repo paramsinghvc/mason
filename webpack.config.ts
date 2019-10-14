@@ -47,13 +47,13 @@ const config: webpack.Configuration = {
     new CleanWebpackPlugin({
       verbose: true
     }),
-    new DtsBundlePlugin({ merge: true }),
-    new TypedocWebpackPlugin(
-      {
-        out: path.resolve(__dirname, "docs")
-      },
-      "./src"
-    )
+    new DtsBundlePlugin({ merge: true })
+    // new TypedocWebpackPlugin(
+    //   {
+    //     out: path.resolve(__dirname, "docs")
+    //   },
+    //   "./src"
+    // )
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"]

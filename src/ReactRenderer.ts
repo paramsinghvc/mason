@@ -145,7 +145,7 @@ function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state
     return state;
   }
   const { meta, id, children } = config;
-  if (values && values.get(id)) {
+  if (values && typeof values.get(id) !== "undefined") {
     state[id] = { ...(state[id] || {}), value: values.get(id), initialValue: values.get(id) };
   } else if (meta && typeof meta.value !== "undefined") {
     state[id] = { ...(state[id] || {}), value: meta.value, initialValue: meta.value };

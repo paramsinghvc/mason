@@ -1,13 +1,6 @@
-import React, { memo } from "react";
+import * as React from "react";
 import styled from "@emotion/styled";
-
-const TextInput = styled.input`
-  border: 2px solid grey;
-  border-radius: 3px;
-  padding: 15px 25px;
-  font-size: 16px;
-  width: 100%;
-`;
+import { State } from "@mollycule/mason";
 
 const ErrorsText = styled.div`
   color: #f5222d;
@@ -17,11 +10,30 @@ const ErrorsText = styled.div`
   }
 `;
 
-// eslint-disable-next-line no-unused-vars
-const TextField = ({ children, value, validations, ...props }: any) => {
+const TextInput = styled.input`
+  border: 2px solid grey;
+  border-radius: 3px;
+  padding: 15px 25px;
+  font-size: 16px;
+  width: 100%;
+`;
+
+const TextArea = styled.textarea`
+  border: 2px solid grey;
+  border-radius: 3px;
+  padding: 15px 25px;
+  font-size: 16px;
+  width: 100%;
+`;
+
+const TextField: React.FC<{
+  value: string;
+  validations: State.validations;
+  multiline?: boolean;
+}> = ({ children, value, validations, multiline, ...props }) => {
   return (
     <>
-      <TextInput value={value} {...props} />
+      {multiline ? <TextArea value={value} {...props} /> : <TextInput value={value} {...props} />}
       {validations && validations.hasErrors && (
         <ErrorsText>
           {Object.entries(validations.errors)
@@ -35,4 +47,4 @@ const TextField = ({ children, value, validations, ...props }: any) => {
   );
 };
 
-export default memo(TextField);
+export default React.memo(TextField);

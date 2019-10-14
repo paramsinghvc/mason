@@ -1,0 +1,153 @@
+{
+    "page": "Demo Form",
+    "config": {
+      "id": "holderCard",
+      "type": "CARD",
+      "style": {
+        "margin": "10px 10px",
+        "padding": "30px"
+      },
+      "children": [
+        {
+          "id": "formHeaderText",
+          "type": "HEADER",
+          "meta": {
+            "text": "Demo Form"
+          },
+          "style": {
+            "marginTop": 0,
+            "marginBottom": 20
+          }
+        },
+        {
+          "id": "firstName",
+          "type": "TEXTFIELD",
+          "meta": {
+            "value": "",
+            "placeholder": "First Name"
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 15
+          }
+        },
+        {
+          "id": "lastName",
+          "type": "TEXTFIELD",
+          "meta": {
+            "value": "",
+            "placeholder": "Last Name"
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 15
+          }
+        },
+        {
+          "id": "occupation",
+          "type": "SELECT",
+          "meta": {
+            "datasource": [
+              "Front-End Developer",
+              "Backend Developer",
+              "Full-Stack Developer"
+            ],
+            "value": "",
+            "label": "Occupation"
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 15
+          }
+        },
+        {
+          "id": "bio",
+          "type": "TEXTFIELD",
+          "meta": {
+            "placeholder": "Write a bio",
+            "multiline": true,
+            "rows": 5,
+            "value": ""
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 15
+          }
+        },
+        {
+          "id": "agreeTNC",
+          "type": "CHECKBOX",
+          "meta": {
+            "label": "I Agree to the terms & conditions",
+            "value": false
+          },
+          "events": {
+            "onChange": {
+              "type": "SET_VALUE"
+            }
+          },
+          "style": {
+            "marginBottom": 25
+          }
+        },
+        {
+          "id": "btnPanel",
+          "type": "BUTTON_PANEL",
+          "children": [
+            {
+              "id": "resetButton",
+              "type": "BUTTON",
+              "meta": {
+                "label": "RESET",
+                "variant": "flat"
+              },
+              "style": {
+                "marginRight": 10
+              },
+              "events": {
+                "onClick": {
+                  "type": "CUSTOM",
+                  "meta": {
+                    "name": "onReset"
+                  }
+                }
+              }
+            },
+            {
+              "id": "submitButton",
+              "type": "BUTTON",
+              "meta": {
+                "label": "SUBMIT",
+                "rounded": true
+              },
+              "events": {
+                "onClick": {
+                  "type": "CUSTOM",
+                  "meta": {
+                    "name": "onSubmit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+  
