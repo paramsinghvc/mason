@@ -139,14 +139,14 @@ const wrappedDispatch = (
   return state;
 };
 
-function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state: State, values: Map<string, any>) {
+function constructStateFromValue(config: IConfigNode | Array<IConfigNode>, state: State, values: IObject) {
   if (Array.isArray(config)) {
     config.forEach(childConfigNode => constructStateFromValue(childConfigNode, state, values));
     return state;
   }
   const { meta, id, children } = config;
-  if (values && typeof values.get(id) !== "undefined") {
-    state[id] = { ...(state[id] || {}), value: values.get(id), initialValue: values.get(id) };
+  if (values && typeof values[id] !== "undefined") {
+    state[id] = { ...(state[id] || {}), value: values[id], initialValue: values[id] };
   } else if (meta && typeof meta.value !== "undefined") {
     state[id] = { ...(state[id] || {}), value: meta.value, initialValue: meta.value };
   }
@@ -254,16 +254,16 @@ const evaluateDisabledClause = (
 };
 
 export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
-  private componentsMap: Map<string, React.ExoticComponent> = new Map();
+  private componentsMap: IObject<React.ExoticComponent> = {};
   readonly config: IConfig;
-  private elementsMap: Map<string, React.ComponentType<any>>;
+  private elementsMap: IObject<React.ComponentType<any>>;
   public options: IRendererOptions;
   private currentRootStateSnapshot: State;
   private rootComponentRef: React.MutableRefObject<any> | null;
   public hasErrors = false;
   public isPristine = true;
   public isInvalid = false;
-  constructor(config: IConfig, elementsMap: Map<string, React.ComponentType<any>>, options?: IRendererOptions) {
+  constructor(config: IConfig, elementsMap: IObject<React.ComponentType<any>>, options?: IRendererOptions) {
     this.config = config;
     this.elementsMap = elementsMap;
     this.options = options || {};
@@ -275,7 +275,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     const { id, type, meta = {}, data, events = {}, validations, children, style, show, disabled } = node;
     const { dataProcessors = {}, onStateChange, resolvers, validators } = this.options;
 
-    const elementComponent = this.elementsMap.get(type);
+    const elementComponent = this.elementsMap[type];
     if (!elementComponent) {
       throw new Error(`No component exists for type ${type}`);
     }
@@ -371,11 +371,11 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
     );
     const displayName = getWrapperComponentName(id);
     let component;
-    if (this.componentsMap.has(displayName)) {
-      component = this.componentsMap.get(displayName);
+    if (this.componentsMap[displayName]) {
+      component = this.componentsMap[displayName];
     } else {
       wrappedComponent.displayName = getWrapperComponentName(id);
-      this.componentsMap.set(displayName, wrappedComponent);
+      this.componentsMap[displayName] = wrappedComponent;
       component = wrappedComponent;
     }
     // wrappedComponent.whyDidYouRender = true;
@@ -384,7 +384,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
       { key: id, style, id, resolvers },
       ...(children ? children.map(this.renderConfigNode) : [])
     );
-    // this.components.set(id, el);
+    // this.components[id] = el;
     return el;
   }
 

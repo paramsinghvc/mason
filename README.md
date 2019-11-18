@@ -185,12 +185,13 @@ yarn add @mollycule/mason
 import { ReactConfigRenderer } from "@mollycule/mason";
 const homePageRenderer = new ReactConfigRenderer(
   config,
-  new Map([
-    ["PAGE_LAYOUT", HomePageLayout], 
-    ["SEARCH_INPUT", Search],
-    ["RECIPES_LIST_GROUP", Recipes]
-  ]),
   {
+    PAGE_LAYOUT: HomePageLayout, 
+    SEARCH_INPUT: Search,
+    RECIPES_LIST_GROUP: Recipes
+  },
+  {
+    initialValues: { email: "some@example.com", password: "password"},
     dataProcessors: {
       recipeDataSourceProcessor(dataSource) {
         return dataSource.hits.map(h => h.recipe);
@@ -258,12 +259,12 @@ Note: The **`config`** property can be an array of nodes as well striaght-away i
       ```tsx
       const homePageRenderer = new ReactConfigRenderer(
         config,
-        new Map([
-          ["PAGE_LAYOUT", HomePageLayout], 
-          ["SEARCH_INPUT", SearchInput],
-          ["RECIPES_LIST_GROUP", RecipesListGroup],
-          ["FOO", () => <p>foo</p>]
-        ])
+        {
+          PAGE_LAYOUT: HomePageLayout, 
+          SEARCH_INPUT: SearchInput,
+          RECIPES_LIST_GROUP: RecipesListGroup,
+          FOO: () => <p>foo</p>
+        }
       );
       ```
 3. <strong>`meta`</strong> field can be used to pass any properties to an UI Component that'll be added as inline props to the component being rendered. You can pass component props or normal HTML element props in it. 

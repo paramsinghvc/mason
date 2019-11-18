@@ -13,7 +13,7 @@ export declare class ReactConfigRenderer implements IConfigRenderer<React.ReactN
     hasErrors: boolean;
     isPristine: boolean;
     isInvalid: boolean;
-    constructor(config: IConfig, elementsMap: Map<string, React.ComponentType<any>>, options?: IRendererOptions);
+    constructor(config: IConfig, elementsMap: IObject<React.ComponentType<any>>, options?: IRendererOptions);
     renderConfigNode(node: IConfigNode): any;
     checkIfValuesPristine(rootState: State): boolean;
     constructInitialState(config: IConfigNode | Array<IConfigNode>, initialState: any): State;
@@ -151,8 +151,8 @@ export interface IConfigRenderer<ReturnNodeType = any> {
     readonly config: IConfig;
     render: () => ReturnNodeType;
 }
-export declare type IObject = {
-    [k: string]: any;
+export declare type IObject<T = any> = {
+    [k: string]: T;
 };
 export declare type State = {
     [id: string]: {
@@ -176,7 +176,7 @@ export declare type FunctionsMap<T = any, U = any> = {
 };
 export declare type ValidatorFunctionsMap = FunctionsMap<any, string | undefined | null>;
 export declare type IRendererOptions = {
-    initialValues?: Map<string, any>;
+    initialValues?: IObject;
     dataProcessors?: FunctionsMap;
     resolvers?: FunctionsMap;
     validators?: ValidatorFunctionsMap;

@@ -5,6 +5,7 @@ import config from "~configs/RecipesPage.json";
 import { ReactConfigRenderer } from "../../../src";
 import TextField from "~components/TextField";
 import Recipes, { dataSourceProcessor as recipeDataSourceProcessor } from "./Recipes";
+import { IConfig } from "~../src/types";
 
 const Holder = styled.main`
   margin: 10vh auto;
@@ -17,8 +18,8 @@ const HomePageLayout = ({ children }: any) => {
 };
 
 const homePageRenderer = new ReactConfigRenderer(
-  config,
-  new Map([["PAGE_LAYOUT", HomePageLayout], ["SEARCH_INPUT", TextField], ["RECIPES_LIST_GROUP", Recipes]]),
+  config as IConfig,
+  { PAGE_LAYOUT: HomePageLayout, SEARCH_INPUT: TextField, RECIPES_LIST_GROUP: Recipes },
   {
     dataProcessors: {
       recipeDataSourceProcessor

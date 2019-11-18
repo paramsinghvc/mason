@@ -119,8 +119,8 @@ export interface IConfigRenderer<ReturnNodeType = any> {
   render: () => ReturnNodeType;
 }
 
-export type IObject = {
-  [k: string]: any;
+export type IObject<T = any> = {
+  [k: string]: T;
 };
 
 export type State = {
@@ -151,7 +151,7 @@ export type FunctionsMap<T = any, U = any> = {
 export type ValidatorFunctionsMap = FunctionsMap<any, string | undefined | null>;
 
 export type IRendererOptions = {
-  initialValues?: Map<string, any>;
+  initialValues?: IObject;
   dataProcessors?: FunctionsMap;
   resolvers?: FunctionsMap;
   validators?: ValidatorFunctionsMap;

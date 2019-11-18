@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { State } from "@mollycule/mason";
+import { State } from "../../src/types";
 
 const ErrorsText = styled.div`
   color: #f5222d;

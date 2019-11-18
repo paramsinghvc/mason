@@ -24,9 +24,9 @@ const LoginForm = () => {
   const loginFormRenderer = useMemo(() => {
     return new ReactConfigRenderer(
       config as IConfig,
-      new Map([["PAGE_LAYOUT", TextField], ["TEXTFIELD", TextField], ["BUTTON", Button], ["BUTTON_PANEL", ButtonPanel]]),
+      { PAGE_LAYOUT: TextField, TEXTFIELD: TextField, BUTTON: Button, BUTTON_PANEL: ButtonPanel },
       {
-        initialValues: new Map([["email", "paramsinghvc@gmail.com"]]),
+        initialValues: { email: "paramsinghvc@gmail.com" },
         validators: {
           myCustomEmailValidator(value: string) {
             return !value.includes("swiggy") ? "Not a valid swiggy email" : undefined;
