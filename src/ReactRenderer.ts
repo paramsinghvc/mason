@@ -341,7 +341,7 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
           () =>
             createElement(
               elementComponent,
-              { ...(rootState[id] ? rootState[id] : { ...meta, ...props }), disabled: disabledEvaluated, ...eventsMap },
+              { ...(rootState[id] ? rootState[id] : { ...meta, ...props, id }), disabled: disabledEvaluated, ...eventsMap },
               props.children
             ),
           [rootState[id], eventsMap, props.children]
@@ -366,7 +366,11 @@ export class ReactConfigRenderer implements IConfigRenderer<React.ReactNode> {
 
         const sectionProps = { ...props };
         delete sectionProps.resolvers;
-        return showCondition ? createElement("section", sectionProps, component) : null;
+        return showCondition
+          ? React.isValidElement(component)
+            ? component
+            : createElement("section", sectionProps, component)
+          : null;
       }
     );
     const displayName = getWrapperComponentName(id);
