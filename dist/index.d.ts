@@ -112,8 +112,9 @@ export interface IDataAjaxConfig {
 export interface IDataSetValueConfig {
     type: "SET_VALUE";
     meta: {
-        value: any;
+        value?: any;
         fieldId?: string;
+        name?: string;
     };
 }
 export interface IDataSetDatasourceConfig {
