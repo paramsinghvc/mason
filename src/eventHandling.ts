@@ -180,8 +180,13 @@ export const handleEvent = (
       {
         const { meta } = eventConfig as IDataSetValueConfig;
         let finalValue = null;
-        if (typeof meta !== "undefined" && meta.value) {
-          finalValue = meta.value;
+        if (typeof meta !== "undefined") {
+          if (meta.value) finalValue = meta.value;
+          if (meta.name) {
+            if (resolvers && resolvers[meta.name]) {
+              finalValue = resolvers[meta.name]({ event, value, id });
+            }
+          }
         } else if (typeof value !== "undefined") {
           finalValue = value;
         } else {
