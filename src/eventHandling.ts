@@ -165,13 +165,17 @@ export const handleEvent = (
       break;
     case "SET_DATASOURCE":
       {
-        const { data: dataSource, fieldId } = (eventConfig as IDataSetDatasourceConfig).meta;
+        let resolvedDataSource;
+        const { data, fieldId, dataResolver } = (eventConfig as IDataSetDatasourceConfig).meta;
+        if (resolvers && resolvers[dataResolver]) {
+          resolvedDataSource = resolvers[dataResolver]({ event, value, id });
+        }
         rootDispatch({
           type: "UPDATE_PROP",
           payload: {
             id: fieldId || id,
             prop: "datasource",
-            value: dataSource
+            value: data || resolvedDataSource
           }
         });
       }
@@ -180,13 +184,8 @@ export const handleEvent = (
       {
         const { meta } = eventConfig as IDataSetValueConfig;
         let finalValue = null;
-        if (typeof meta !== "undefined") {
-          if (meta.value) finalValue = meta.value;
-          if (meta.name) {
-            if (resolvers && resolvers[meta.name]) {
-              finalValue = resolvers[meta.name]({ event, value, id });
-            }
-          }
+        if (typeof meta !== "undefined" && meta.value) {
+          finalValue = meta.value;
         } else if (typeof value !== "undefined") {
           finalValue = value;
         } else {
